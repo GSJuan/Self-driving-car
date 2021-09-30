@@ -19,6 +19,8 @@ class Vehicle {
     int row_pos;
     int column_pos;
     int direction;
+    int destination_row;
+    int destination_col;
 
     virtual void Turn45(bool) = 0;
     virtual void Turn45(char) = 0;
@@ -28,7 +30,7 @@ class Vehicle {
     public:
 
     Vehicle();
-    Vehicle(int, int, int);
+    Vehicle(int, int, int, int, int);
     ~Vehicle();
 
     int GetRow(void); //devulve la fila en la que se encuentra la hormiga

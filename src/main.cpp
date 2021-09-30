@@ -11,7 +11,7 @@
 #include "include/simulation.h"
 
 int main( void /* int argc, char* argv[]*/ ) {
-    int row_min, row_max, col_min, col_max, iterations, direction, vehicle_row, vehicle_col, menu, vehicle_type;
+    int row_min, row_max, col_min, col_max, iterations, direction, vehicle_row, vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, randomize;
     std::cout << "¿Desea el comportamiento por defecto del mundo(0), o personalizar la experiencia(1)?" << std::endl << "Introduzca 0 o 1: ";
     std::cin >> menu;
     while((menu != 0) && (menu != 1)){
@@ -22,11 +22,12 @@ int main( void /* int argc, char* argv[]*/ ) {
     }
 
 if (menu == 0){
-    row_min = -4;
-    row_max = 4;
-    col_min = -4;
-    col_max = 4;
-    iterations = 10;
+    row_min = -10;
+    row_max = 10;
+    col_min = -10;
+    col_max = 10;
+    iterations = 30;
+    obstacle_percentage = 30;
 }
 else if(menu == 1) {
     
@@ -52,12 +53,21 @@ else if(menu == 1) {
         std::cout << "Introduzca el indice menor de las columnas del mundo(menor que 0): " << std:: endl;
         std::cin >> col_min;
     }
+
     std::cout << std::endl << "Introduzca el indice mayor de las columnas del mundo(mayor o igual que 0): " << std:: endl;
     std::cin >> col_max;
     while (col_max < 0){
         std::cout << "Eso no era mayor que 0. Ojito Cuidado" << std::endl;
         std::cout << "Introduzca el indice mayor de las columnas del mundo(mayor o igual que 0): " << std:: endl;
         std::cin >> col_max;
+    }
+
+    std::cout << "Introduzca el porcentaje de obstaculos (entre 0 y 100): " << std:: endl;
+    std::cin >> obstacle_percentage;
+    while ((obstacle_percentage < 0) || (obstacle_percentage > 100)){
+        std::cout << "Eso no estaba entre 0 y 100. Ojito Cuidado" << std::endl;
+        std::cout << "Introduzca el numero de iteraciones(entre 0 y 100): " << std:: endl;
+        std::cin >> obstacle_percentage;
     }
 
     std::cout << "Introduzca el numero de iteraciones(mayor que 0): " << std:: endl;
@@ -71,6 +81,11 @@ else if(menu == 1) {
 
 World* pWorld;
 pWorld = new FiniteWorld(row_min, row_max, col_min, col_max);
+
+int world_size = pWorld->GetSize();
+int obstacle_quantity = world_size * obstacle_percentage / 100;
+
+
 Vehicle *pvehicle;
 
     std::cout << "Introduzca la coordenada X de la hormiga: ";
@@ -97,7 +112,28 @@ Vehicle *pvehicle;
         std::cin >> direction;
     }
 
-pvehicle = new Taxi(vehicle_row, vehicle_col, direction);
+    std::cout << "Introduzca la coordenada X de destino: ";
+    std::cin >> destination_row;
+    while ((destination_row < row_min) || (destination_row > row_max)) {
+        std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+        std::cout << "Introduzca una coordenada entre " << row_min << " y " << row_max << std:: endl;
+    std::cin >> destination_row;
+    }
+
+    std::cout << "Introduzca la coordenada Y de destino: ";
+    std::cin >> destination_col;
+    while ((destination_col < col_min) || (destination_col > col_max)) {
+        std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+        std::cout << "Introduzca una coordenada entre " << col_min << " y " << col_max << std:: endl;
+        std::cin >> destination_col;
+    }
+
+/*
+
+Implement manual and automatic obstacle addition
+
+*/
+pvehicle = new Taxi(vehicle_row, vehicle_col, direction, destination_row, destination_row);
 Universe universe(pWorld, pvehicle, iterations);
 universe.Loop();
 

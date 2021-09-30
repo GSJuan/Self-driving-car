@@ -162,14 +162,12 @@ void World::PrintGrid(Vehicle* vehicle){
             std::cout << "|";
             for(int j = world[i].GetLowerLimit(); j < world[i].GetUpperLimit(); j++) {
                 if((i != vehicle->GetRow()) || (j != vehicle->GetColumn()))
-                std::cout << GetWorldState(i,j);
-                else {
-                    vehicle->PrintDirection();
+                    std::cout << GetWorldState(i,j);
+                else vehicle->PrintDirection();
             }
             std::cout << "|" << std::endl;
         }
     PrintHorizontalWall();
-}
 }
 
 bool World::VehicleOut(Vehicle* vehicle) {
