@@ -10,6 +10,6 @@
 
 struct Cell {
 
-    bool value;
-    char state = ' ';
+    bool value; //libre(false) u ocupado (true)
+    char state = ' '; // X pasó por ahí, " " libre, O obstaculo.
 };

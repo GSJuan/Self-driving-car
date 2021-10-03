@@ -36,6 +36,8 @@ class Vehicle {
     int GetRow(void); //devulve la fila en la que se encuentra la hormiga
     int GetColumn(void); //devulve la columna en la que se encuentra la hormiga
     int GetDirection(void); //devuelve la dirección que tiene la hormiga
+    int GetDestinationRow(void); //devuelve la fila en la que se encuentrab la direccion de destino del vehiculo
+    int GetDestinationColumn(void); //devuelve la columna en la que esta la direccion de destino
 
     void SetRow(int);
     void SetColumn(int);

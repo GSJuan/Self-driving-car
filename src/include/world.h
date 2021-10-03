@@ -11,6 +11,7 @@
 #include "vector.h"
 
 #include <iostream>
+#include <random>
 #include "stdio.h"
 
 #pragma once
@@ -31,6 +32,7 @@ public:
 World(); //Constructor por defecto
 World(int, int); //Constructor por tamaño
 explicit World(int, int, int, int);
+explicit World(int, int, int, int, int);
 virtual ~World();//Destructor
 
 inline int GetRow() {
@@ -51,9 +53,7 @@ inline Cell GetCell(int i, int j){
     }
     catch(std::exception e){
         throw e;
-    }
-
-    
+    }   
 }
 
 inline Vector<Vector<Cell>>& GetWorld(void){
@@ -76,7 +76,7 @@ virtual void ReSize(Vehicle*) = 0;
 
 void PrintWorld(void); //imprime la malla sola
 void PrintHorizontalWall(void); //imprime una pared horizontal
-void Update(std::vector<Vehicle>&); //función que actualiza las casillas donde están las hormigas
+//void Update(std::vector<Vehicle>&); //función que actualiza las casillas donde están las hormigas
 void PrintGrid (Vehicle*);
 
 bool VehicleOut(Vehicle*);

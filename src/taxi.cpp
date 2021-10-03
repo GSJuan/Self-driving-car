@@ -42,6 +42,14 @@ int Vehicle::GetColumn(void) {
     return column_pos;
 }
 
+int Vehicle::GetDestinationRow(void) {
+    return destination_row;
+}
+
+int Vehicle::GetDestinationColumn(void) {
+    return destination_col;
+}
+
 int Vehicle::GetDirection(void) {
     return direction;
 }
@@ -62,6 +70,7 @@ void Vehicle::Update(World& grid) {
     try{
        Turn45(grid.GetWorldValue(GetRow(), GetColumn()));
     grid.ToggleWorldValue(GetRow(), GetColumn());
+    grid.SetWorldState('X', GetRow(), GetColumn());
     Move(); 
     }
     catch (std::exception& e){

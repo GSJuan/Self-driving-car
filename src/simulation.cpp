@@ -54,8 +54,8 @@ void Universe::Loop(void) {
     try {
         for (int i = 0; i < GetMaxIter(); i++){
             SetCurrIter(i +1);
-            vehicle->Update(*grid);
             grid->TryPosition(vehicle); //prueba las hormigas a ver si estan fuera
+            vehicle->Update(*grid);
             grid->PrintGrid(vehicle);
             std::cout << "Current iteration: " << GetCurrIter() << std::endl;
             PrintData();

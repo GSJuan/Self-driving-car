@@ -80,11 +80,7 @@ else if(menu == 1) {
 }
 
 World* pWorld;
-pWorld = new FiniteWorld(row_min, row_max, col_min, col_max);
-
-int world_size = pWorld->GetSize();
-int obstacle_quantity = world_size * obstacle_percentage / 100;
-
+pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage);
 
 Vehicle *pvehicle;
 
@@ -112,21 +108,23 @@ Vehicle *pvehicle;
         std::cin >> direction;
     }
 
-    std::cout << "Introduzca la coordenada X de destino: ";
-    std::cin >> destination_row;
-    while ((destination_row < row_min) || (destination_row > row_max)) {
-        std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-        std::cout << "Introduzca una coordenada entre " << row_min << " y " << row_max << std:: endl;
-    std::cin >> destination_row;
-    }
+    do {
+        std::cout << "Introduzca la coordenada X de destino: ";
+        std::cin >> destination_row;
+        while ((destination_row < row_min) || (destination_row > row_max)) {
+            std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+            std::cout << "Introduzca una coordenada entre " << row_min << " y " << row_max << std:: endl;
+        std::cin >> destination_row;
+        }
 
-    std::cout << "Introduzca la coordenada Y de destino: ";
-    std::cin >> destination_col;
-    while ((destination_col < col_min) || (destination_col > col_max)) {
-        std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-        std::cout << "Introduzca una coordenada entre " << col_min << " y " << col_max << std:: endl;
+        std::cout << "Introduzca la coordenada Y de destino: ";
         std::cin >> destination_col;
-    }
+        while ((destination_col < col_min) || (destination_col > col_max)) {
+            std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+            std::cout << "Introduzca una coordenada entre " << col_min << " y " << col_max << std:: endl;
+            std::cin >> destination_col;
+        }
+    } while ((pWorld->GetWorldValue(destination_row, destination_col)) == true); //mientras la direccion de origen esté ocupada por un obstaculo se repite el proceso de instertar direccion de origen
 
 /*
 

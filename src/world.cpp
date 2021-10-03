@@ -45,6 +45,35 @@ World::World(int row_min, int row_max, int col_min, int col_max){
     }
 }
 
+World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+    row = row_max - row_min;
+    column = col_max - col_min;
+    size = row * column;
+    world.resize(row);
+    world.SetLowerLimit(row_min);
+    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++){
+        world[i].resize(column);
+        world[i].SetLowerLimit(col_min);
+    }
+    
+    int obstacle_quantity = size * obstacle_percentage / 100;
+    srand(time(NULL));
+
+   
+    
+    for(int i = 0; i < obstacle_quantity; i++) {
+
+        int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
+        int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+
+        std::cout << random_row << " " << random_col << std::endl;
+
+        SetWorldState('O', random_row, random_col);
+        SetWorldValue(true, random_row, random_col);
+    }
+}
+
+
 
 //Destructor
 
@@ -84,29 +113,19 @@ void World::SetSize(int size_) {
 
 void World::SetWorldState(char state_, int i, int j) {
     world[i][j].state = state_;
-    if(state_ == ' ')
-        world[i][j].value = false;
-    else
-        world[i][j].value = true;
 }
 
 void World::SetWorldValue(bool value_, int i, int j) {
     world[i][j].value = value_;
-    if(value_ == false)
-        world[i][j].state = ' ';
-    else
-        world[i][j].state = 'X';
 }
 
 void World::ToggleWorldValue(int i, int j){
     
    if(world[i][j].value == false){
         world[i][j].value = true;
-        world[i][j].state = 'X';
    }
    else {
         world[i][j].value = false;
-        world[i][j].state = ' ';
    }  
 }
 
@@ -144,7 +163,7 @@ void World::PrintHorizontalWall(void) {
     std::cout << std::endl;
 }
 
-void World::Update(std::vector<Vehicle>& vehicle) {
+/*void World::Update(std::vector<Vehicle>& vehicle) {
 
     for(int i = 0; i < vehicle.size(); i++) {
         if ((GetWorldValue(vehicle[i].GetRow(), vehicle[i].GetColumn())) == false){ // casilla blanca
@@ -155,15 +174,19 @@ void World::Update(std::vector<Vehicle>& vehicle) {
         } 
     }
 }
+*/
 
 void World::PrintGrid(Vehicle* vehicle){
     PrintHorizontalWall();
         for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
             std::cout << "|";
             for(int j = world[i].GetLowerLimit(); j < world[i].GetUpperLimit(); j++) {
-                if((i != vehicle->GetRow()) || (j != vehicle->GetColumn()))
-                    std::cout << GetWorldState(i,j);
-                else vehicle->PrintDirection();
+                if((i == vehicle->GetRow()) && (j == vehicle->GetColumn()))
+                    vehicle->PrintDirection();
+                else if ((i == vehicle->GetDestinationRow()) && (j == vehicle->GetDestinationColumn())){
+                    std::cout << "\u2691";
+                }
+                else std::cout << GetWorldState(i,j);
             }
             std::cout << "|" << std::endl;
         }
