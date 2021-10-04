@@ -1,3 +1,13 @@
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
+// EMAIL: alu0101325583@ull.edu.es
+// VERSION: 4.0
+// SUBJECT: AI
+// PRACTICE Nº: 1
+// Compilation: make
+// Execution: ./simulation
+//clase vector que acepta indices negativos
+
 #include <vector>
 #include <cassert>
 #include <iostream>

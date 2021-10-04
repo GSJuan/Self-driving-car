@@ -1,12 +1,11 @@
-
-// AUTHOR: Juan García SVehicleos
-// DATE: 21/03/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
 // VERSION: 4.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 4
+// SUBJECT: AI
+// PRACTICE Nº: 1
 // Compilation: make
-// Execution: ./langton
+// Execution: ./simulation
 // Especificaciones de la clase mundo
 
 #include "include/world.h"
@@ -65,8 +64,6 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
 
         int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
         int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
-
-        std::cout << random_row << " " << random_col << std::endl;
 
         SetWorldState('O', random_row, random_col);
         SetWorldValue(true, random_row, random_col);

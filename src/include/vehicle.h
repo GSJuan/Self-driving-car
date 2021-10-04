@@ -1,10 +1,12 @@
-// AUTHOR: Juan García SVehicleos
-// DATE: 21/01/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
-// VERSION: 2.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 4
-// Clase Hormiga que contiene las características de la hormiga de langton
+// VERSION: 4.0
+// SUBJECT: AI
+// PRACTICE Nº: 1
+// Compilation: make
+// Execution: ./simulation
+// Clase vehiculo que contiene las características del vehiculo
 
 class World;
 

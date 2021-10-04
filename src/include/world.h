@@ -1,12 +1,13 @@
-// AUTHOR: Juan García SVehicleos
-// DATE: 16/03/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
-// VERSION: 3.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 3
+// VERSION: 4.0
+// SUBJECT: AI
+// PRACTICE Nº: 1
 // Compilation: make
-// Execution: ./langton
-// Clase "mundo" para definir el comportamiento y características de la malla
+// Execution: ./simulation
+// Clase "mundo" para definir el comportamiento y características del entorno del vehiculo
+
 #include "taxi.h"
 #include "vector.h"
 

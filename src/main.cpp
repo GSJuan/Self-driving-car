@@ -1,12 +1,13 @@
-// AUTHOR: Juan García Svehicleos
-// DATE: 21/03/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
 // VERSION: 4.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 4
+// SUBJECT: AI
+// PRACTICE Nº: 1
 // Compilation: make
-// Execution: ./langton
-// Este programa simula el comportamiento de la hormiga de langton en un formto de texto.
+// Execution: ./simulation
+// Este programa simula el comportamiento del taxi autonomo en un formto de texto.
+//chcp.com 65001 arregla el encoding
 
 #include "include/simulation.h"
 
@@ -84,7 +85,7 @@ pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage
 
 Vehicle *pvehicle;
 
-    std::cout << "Introduzca la coordenada X de la hormiga: ";
+    std::cout << "Introduzca la coordenada X del taxi: ";
     std::cin >> vehicle_row;
     while ((vehicle_row < row_min) || (vehicle_row > row_max)) {
         std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
@@ -92,7 +93,7 @@ Vehicle *pvehicle;
     std::cin >> vehicle_row;
     }
 
-    std::cout << "Introduzca la coordenada Y de la hormiga: ";
+    std::cout << "Introduzca la coordenada Y del taxi: ";
     std::cin >> vehicle_col;
     while ((vehicle_col < col_min) || (vehicle_col > col_max)) {
         std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
@@ -100,11 +101,11 @@ Vehicle *pvehicle;
         std::cin >> vehicle_col;
     }
     
-    std::cout << "Introduzca la dirección inicial de la hormiga (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
+    std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
     std::cin >> direction;
     while ((direction < 1) || (direction > 8)) {
         std::cout << "carácter de dirección incorrecto" << std::endl;
-        std::cout << "Introduzca la dirección inicial de la hormiga (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
+        std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
         std::cin >> direction;
     }
 
@@ -132,7 +133,7 @@ Implement manual and automatic obstacle addition
 
 */
 pvehicle = new Taxi(vehicle_row, vehicle_col, direction, destination_row, destination_row);
-Universe universe(pWorld, pvehicle, iterations);
+Simulation universe(pWorld, pvehicle, iterations);
 universe.Loop();
 
 return 0;

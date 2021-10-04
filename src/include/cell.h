@@ -1,9 +1,11 @@
 // AUTHOR: Juan García Santos
-// DATE: 02/01/2021
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
-// VERSION: 1.0
-// SUBJECT: AEDA
+// VERSION: 4.0
+// SUBJECT: AI
 // PRACTICE Nº: 1
+// Compilation: make
+// Execution: ./simulation
 // Pequeño struct para representar las celdas
 
 #pragma once

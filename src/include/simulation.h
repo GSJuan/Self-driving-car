@@ -1,16 +1,18 @@
-// AUTHOR: Juan García SVehicleos
-// DATE: 02/01/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
-// VERSION: 1.0
-// SUBJECT: AEDA
+// VERSION: 4.0
+// SUBJECT: AI
 // PRACTICE Nº: 1
-// Clase Universe que define la relacion entre hormiga y mundo
+// Compilation: make
+// Execution: ./simulation
+// Clase Simulation que define la relacion entre taxi y entorno (clase world)
 
 #include "finite_world.h"
 
 #pragma once
 
-class Universe {
+class Simulation {
 
     private:
 
@@ -21,10 +23,10 @@ class Universe {
 
     public:
 
-    Universe();
-    Universe(int);
-    Universe(World*, Vehicle*, int);
-    ~Universe();
+    Simulation();
+    Simulation(int);
+    Simulation(World*, Vehicle*, int);
+    ~Simulation();
 
     int GetMaxIter(void); //devuelve el numero maximo de iteraciones
     int GetCurrIter(void); //devuelve el numero actual de iteraciones

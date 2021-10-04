@@ -1,53 +1,53 @@
-// AUTHOR: Juan García Svehicleos
-// DATE: 21/03/2021
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
 // VERSION: 4.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 4
+// SUBJECT: AI
+// PRACTICE Nº: 1
 // Compilation: make
-// Execution: ./langton
-// Especificaciones de la clase Universe
+// Execution: ./simulation
+// Especificaciones de la clase Simulation
 
 #include "include/simulation.h"
 
 //Constructores y destructor
-Universe::Universe() {
+Simulation::Simulation() {
     max_iter = 10;
     curr_iter = 0;
 }
 
-Universe::Universe(int iter){
+Simulation::Simulation(int iter){
     max_iter = iter;
     curr_iter = 0;
 }
 
-Universe::Universe(World* world, Vehicle* taxi, int iterations){
+Simulation::Simulation(World* world, Vehicle* taxi, int iterations){
     max_iter = iterations;
     curr_iter = 0;
     vehicle = taxi;
     grid = world;
 }
 
-Universe::~Universe() {
+Simulation::~Simulation() {
 }
 
-int Universe::GetMaxIter(void) {
+int Simulation::GetMaxIter(void) {
     return max_iter;
 }
 
-int Universe::GetCurrIter(void) {
+int Simulation::GetCurrIter(void) {
     return curr_iter;
 }
 
-void Universe::SetMaxIter(int iteration) {
+void Simulation::SetMaxIter(int iteration) {
     max_iter = iteration;
 }
    
-void Universe::SetCurrIter(int iteration) {
+void Simulation::SetCurrIter(int iteration) {
     curr_iter = iteration;
 }
 
-void Universe::Loop(void) {
+void Simulation::Loop(void) {
    grid->PrintGrid(vehicle);
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
     PrintData();
@@ -66,7 +66,7 @@ void Universe::Loop(void) {
     }
 }
 
-void Universe::PrintData(void) {
+void Simulation::PrintData(void) {
         std::cout << "vehicle: X = " << vehicle->GetRow() << " Y = " << vehicle->GetColumn() << " Direction: " ;
         vehicle->PrintDirection();
         std::cout << std::endl;

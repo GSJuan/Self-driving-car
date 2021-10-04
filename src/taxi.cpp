@@ -1,13 +1,12 @@
-
 // AUTHOR: Juan García Santos
-// DATE: 21/03/2021
+// DATE: 04/10/2021
 // EMAIL: alu0101325583@ull.edu.es
 // VERSION: 4.0
-// SUBJECT: AEDA
-// PRACTICE Nº: 4
+// SUBJECT: AI
+// PRACTICE Nº: 1
 // Compilation: make
-// Execution: ./langton
-// Especificaciones de la clase hormiga
+// Execution: ./simulation
+// Especificaciones de la clase taxi
 
 #include "include/taxi.h"
 #include "include/world.h"

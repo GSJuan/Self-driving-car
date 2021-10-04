@@ -1,3 +1,12 @@
+// AUTHOR: Juan García Santos
+// DATE: 04/10/2021
+// EMAIL: alu0101325583@ull.edu.es
+// VERSION: 4.0
+// SUBJECT: AI
+// PRACTICE Nº: 1
+// Compilation: make
+// Execution: ./simulation
+//
 #include "world.h"
 #pragma once
 class FiniteWorld: public World 
