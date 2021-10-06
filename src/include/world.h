@@ -53,7 +53,7 @@ inline Cell GetCell(int i, int j){
     try{
         return world[i][j];   
     }
-    catch(std::exception e){
+    catch(std::exception& e){
         throw e;
     }   
 }

@@ -61,7 +61,7 @@ void Simulation::Loop(void) {
             PrintData();
         }
     }
-    catch (std::exception e) {
+    catch (std::exception& e) {
         throw e;
     }
 }
