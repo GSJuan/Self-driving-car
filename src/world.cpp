@@ -17,7 +17,7 @@ World::World(){
     column = 10;
     size = 100;
     world = Vector<Vector<Cell>> (-10,10);
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 10; i++) {
         world[i].resize(10);
     }
 }
@@ -85,6 +85,7 @@ char World::GetWorldState(int i, int j) {
 }
 
 bool World::GetWorldValue(int i, int j) {
+    std::cout << i << "\n" << j << "\n";
     try{
        return world[i][j].value; 
     }

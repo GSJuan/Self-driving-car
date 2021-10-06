@@ -15,7 +15,7 @@ class Taxi: public Vehicle
 
 using Vehicle::Vehicle;
 
-virtual void Turn45(char colour){
+virtual void Turn45(char colour) {
     if(colour == ' '){ //si la casilla es blanca
         if((direction <= 8) && (direction > 1)) //giro a la izquierda
             direction--;
