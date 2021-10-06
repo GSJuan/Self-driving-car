@@ -9,7 +9,7 @@
 // Este programa simula el comportamiento del taxi autonomo en un formto de texto.
 //chcp.com 65001 arregla el encoding
 
-#include "include/simulation.h"
+#include "include/simulation.h" 
 
 int main( void /* int argc, char* argv[]*/ ) {
     int row_min, row_max, col_min, col_max, iterations, direction, vehicle_row, vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, randomize;
