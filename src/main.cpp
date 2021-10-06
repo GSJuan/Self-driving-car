@@ -75,6 +75,13 @@ pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage
 
 Vehicle* pvehicle;
 
+std::cout << "¿Coche de 8 o 4 direcciones?: ";
+std::cin >> vehicle_type;
+while ((vehicle_type != 8) && (vehicle_type != 4)) {
+    std::cout << "Elige entre 8 y 4:" << std::endl;
+    std::cin >> vehicle_type;
+}
+
 std::cout << "Introduzca la coordenada X del taxi: ";
 std::cin >> vehicle_row;
 while ((vehicle_row < 0) || (vehicle_row > row_max * 2 - 1)) {
@@ -95,12 +102,25 @@ while ((vehicle_col < 0) || (vehicle_col > col_max * 2 - 1)) {
 
 vehicle_col += col_min;
 
-std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
-std::cin >> direction;
-while ((direction < 1) || (direction > 8)) {
-    std::cout << "Carácter de dirección incorrecto" << std::endl;
+if (vehicle_type == 8) {
     std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
     std::cin >> direction;
+    while ((direction < 1) || (direction > 8)) {
+        std::cout << "Carácter de dirección incorrecto" << std::endl;
+        std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
+        std::cin >> direction;
+    }
+} else {
+    std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4) " << std:: endl;
+    std::cin >> direction;
+    while ((direction < 1) || (direction > 4)) {
+        std::cout << "Carácter de dirección incorrecto" << std::endl;
+        std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4) " << std:: endl;
+        std::cin >> direction;
+    }
+    if (direction == 2) direction = 3; 
+    else if (direction == 3) direction = 5; 
+    else if (direction == 4) direction = 7; 
 }
 
 do {
@@ -131,7 +151,11 @@ do {
 Implement manual and automatic obstacle addition
 
 */
-pvehicle = new Taxi(vehicle_row, vehicle_col, direction, destination_row, destination_row);
+if (vehicle_type == 8) 
+    pvehicle = new Taxi(vehicle_row, vehicle_col, direction, destination_row, destination_row);
+else 
+    pvehicle = new Uber(vehicle_row, vehicle_col, direction, destination_row, destination_row);
+
 Simulation universe(pWorld, pvehicle, iterations);
 universe.Loop();
 

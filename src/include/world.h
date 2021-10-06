@@ -9,6 +9,7 @@
 // Clase "mundo" para definir el comportamiento y características del entorno del vehiculo
 
 #include "taxi.h"
+#include "uber.h"
 #include "vector.h"
 
 #include <iostream>
