@@ -44,7 +44,7 @@ World::World(int row_min, int row_max, int col_min, int col_max){
     }
 }
 
-World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
     row = row_max - row_min;
     column = col_max - col_min;
     size = row * column;
@@ -54,19 +54,46 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
         world[i].resize(column);
         world[i].SetLowerLimit(col_min);
     }
-    
+
     int obstacle_quantity = size * obstacle_percentage / 100;
-    srand(time(NULL));
+    if(automatic_obstacle == true){
+        srand(time(NULL)); 
+        for(int i = 0; i < obstacle_quantity; i++) {
 
-   
-    
-    for(int i = 0; i < obstacle_quantity; i++) {
+            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
+            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
 
-        int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
-        int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+            SetWorldState('O', random_row, random_col);
+            SetWorldValue(true, random_row, random_col);
+        }
+    }
+    else {
+        int x, y;
+        for(int i = 0; i < obstacle_quantity; i++) {
+            do {
+                std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
+                std::cin >> x;
+                while ((x < 0) || (x > row_max * 2 - 1)) {
+                    std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                std::cin >> x;
+                }
 
-        SetWorldState('O', random_row, random_col);
-        SetWorldValue(true, random_row, random_col);
+                std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
+                std::cin >> y;
+                while ((y < 0) || ( y > col_max * 2 - 1)) {
+                    std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                    std::cin >> y;
+                }
+                
+            } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
+
+            x += row_min;
+            y += col_min;
+            SetWorldState('O', x, y);
+            SetWorldValue(true, x, y);
+        }
     }
 }
 
@@ -85,7 +112,6 @@ char World::GetWorldState(int i, int j) {
 }
 
 bool World::GetWorldValue(int i, int j) {
-    std::cout << i << "\n" << j << "\n";
     try{
        return world[i][j].value; 
     }
@@ -94,8 +120,6 @@ bool World::GetWorldValue(int i, int j) {
         throw std::exception();
     }
 }
-
-
 
 void World::SetRow(int row_) {
     row = row_;

@@ -12,6 +12,7 @@ class World;
 
 #include <iostream>
 #include "stdio.h"
+#include <vector>
 #pragma once
 
 class Vehicle {
@@ -23,6 +24,7 @@ class Vehicle {
     int direction;
     int destination_row;
     int destination_col;
+    std::vector<bool> sensor;
 
     virtual void Turn45(bool) = 0;
     virtual void Turn45(char) = 0;
@@ -47,7 +49,7 @@ class Vehicle {
 
     virtual void Update(World&); //hace el giro y el movimiento en funcion de la casilla
 
-    void PrintDirection(void);
+    virtual void PrintDirection(void) = 0;
     
    /* void Turn90R(void); //cambia la dirección de la hormiga 90 grados a la derecha
     void Turn90L(void); //cambia la dirección de la hormiga 90 grados a la izquierda

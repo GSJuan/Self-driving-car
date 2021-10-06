@@ -13,8 +13,9 @@
 
 int main( void /* int argc, char* argv[]*/ ) {
     int row_min, row_max, col_min, col_max, iterations, direction, vehicle_row;
-    int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, randomize;
-    std::cout << "¿Desea el comportamiento por defecto del mundo (0), o personalizar la experiencia (1)?\n";
+    int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, obstacle_type = -1;
+    bool automatic_obstacles;
+    std::cout << "¿Desea el comportamiento por defecto del mundo con matriz 20x20 (0), o personalizar la experiencia (1)?\n";
     std::cout << "Introduzca 0 o 1: ";
     std::cin >> menu;
     while ((menu != 0) && (menu != 1)) {
@@ -29,6 +30,7 @@ if (menu == 0) {
     col_max = 10;
     iterations = 30;
     obstacle_percentage = 30;
+    automatic_obstacles = true;
 }
 else if (menu == 1) {
     std::cout << "Introduzca el Ancho: ";
@@ -61,6 +63,17 @@ else if (menu == 1) {
         std::cin >> obstacle_percentage;
     }
 
+    std::cout << "¿Desea generacion automatica de obstaculos (0), o introducirlos manualmente?\n";
+    std::cout << "Introduzca 0 o 1: ";
+    std::cin >> obstacle_type;
+    while ((obstacle_type != 0) && (obstacle_type != 1)) {
+        std::cout << "¡Eso no era un 1 o un 0! Ojito cuidado. " << std::endl << "Introduzca 0 o 1: ";
+        std::cin >> obstacle_type;
+    }
+    
+    if(obstacle_type == 1) automatic_obstacles = false;
+    else automatic_obstacles = true;
+
     std::cout << "Introduzca el numero de iteraciones (mayor que 0): " << std:: endl;
     std::cin >> iterations;
     while (iterations <= 0) {
@@ -70,8 +83,10 @@ else if (menu == 1) {
     }
 }
 
+
+
 World* pWorld;
-pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage);
+pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage, automatic_obstacles);
 
 Vehicle* pvehicle;
 
@@ -118,9 +133,6 @@ if (vehicle_type == 8) {
         std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4) " << std:: endl;
         std::cin >> direction;
     }
-    if (direction == 2) direction = 3; 
-    else if (direction == 3) direction = 5; 
-    else if (direction == 4) direction = 7; 
 }
 
 do {

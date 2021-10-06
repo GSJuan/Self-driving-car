@@ -8,7 +8,7 @@
 // Execution: ./simulation
 // Especificaciones de la clase taxi
 
-#include "include/taxi.h"
+#include "include/vehicle.h"
 #include "include/world.h"
 
 //Constructores
@@ -68,40 +68,11 @@ void Vehicle::SetDirection(int next_direction) {
 void Vehicle::Update(World& grid) {
     try{
        Turn45(grid.GetWorldValue(GetRow(), GetColumn()));
-    grid.ToggleWorldValue(GetRow(), GetColumn());
-    grid.SetWorldState('X', GetRow(), GetColumn());
-    Move(); 
+        grid.ToggleWorldValue(GetRow(), GetColumn());
+        grid.SetWorldState('X', GetRow(), GetColumn());
+        Move(); 
     }
     catch (std::exception& e){
         throw e;
-    }
-}
-
-void Vehicle::PrintDirection(void){
-    int direction = GetDirection();
-    switch(direction){
-        case 1: std::cout << "\u2191";
-        break;
-
-        case 2: std::cout << "\u2197";
-        break;
-
-        case 3: std::cout << "\u2192";
-        break;
-
-        case 4: std::cout << "\u2198";
-        break;
-
-        case 5: std::cout << "\u2193";
-        break;
-
-        case 6: std::cout << "\u2199";
-        break;
-
-        case 7: std::cout << "\u2190";
-        break;
-
-        case 8: std::cout << "\u2196";
-        break;
     }
 }

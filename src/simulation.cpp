@@ -54,7 +54,7 @@ void Simulation::Loop(void) {
     try {
         for (int i = 0; i < GetMaxIter(); i++){
             SetCurrIter(i +1);
-            grid->TryPosition(vehicle); //prueba las hormigas a ver si estan fuera
+            grid->TryPosition(vehicle); //prueba el vehiculo a ver si esta fuera
             vehicle->Update(*grid);
             grid->PrintGrid(vehicle);
             std::cout << "Current iteration: " << GetCurrIter() << std::endl;
