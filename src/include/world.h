@@ -12,9 +12,11 @@
 #include "uber.h"
 #include "vector.h"
 
+#include <fstream>
 #include <iostream>
 #include <random>
 #include "stdio.h"
+#include <sstream>
 
 #pragma once
 

@@ -67,33 +67,46 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
             SetWorldValue(true, random_row, random_col);
         }
     }
-    else {
+    else { //Introduccion Manual(Fichero txt)
+        std::ifstream input_file("obstacle.txt");
+        std::string read;
+        std::string value1, value2;
+        int counter = 0;
         int x, y;
-        for(int i = 0; i < obstacle_quantity; i++) {
-            do {
-                std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
-                std::cin >> x;
-                while ((x < 0) || (x > row_max * 2 - 1)) {
-                    std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
-                std::cin >> x;
-                }
+        
+        while(getline(input_file, read)) {
+            if (read[0] != '/' && read[1] != '/') { 
 
-                std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
-                std::cin >> y;
-                while ((y < 0) || ( y > col_max * 2 - 1)) {
-                    std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
-                    std::cin >> y;
+            for(unsigned movement = 0; movement < read.size(); movement ++) {
+                if(read[movement] != ',') {
+                    value1[counter] = read[movement];
+                    counter ++;
                 }
-                
-            } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
+                else
+                    break;
+            }
+            counter = 0;
+            for(unsigned movement = movement + 1; movement < read.size(); movement ++) {
+                value2[counter] = read[movement];
+                counter ++;
+            }
+            
+            read.clear();
+            x = stoi(value1);
+            y = stoi(value2);
+
+            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) {
+                throw "Datos Mal Itroducidos en el TXT";
+            }
 
             x += row_min;
             y += col_min;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
-        }
+            }
+        }          
+    //} while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
+        input_file.close();
     }
 }
 
