@@ -69,32 +69,33 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
     }
     else { //Introduccion Manual(Fichero txt)
         std::ifstream input_file("obstacle.txt");
+        std::vector<std::string> lines;
         std::string read;
-        std::string value1, value2;
-        int counter = 0;
         int x, y;
-        
-        while(getline(input_file, read)) {
-            if (read[0] != '/' && read[1] != '/') { 
 
-            for(unsigned movement = 0; movement < read.size(); movement ++) {
-                if(read[movement] != ',') {
-                    value1[counter] = read[movement];
-                    counter ++;
+        if (!input_file.is_open()) {
+            throw "Could not open the file - obstacle.txt";
+        }
+        
+        while(getline(input_file, read)) { //Por defecto viene \n
+            if (read[0] != '/' && read[1] != '/') {
+
+            lines.push_back(read);
+                for (const auto &i : lines)
+                    std::cout<<"Introduciendo coordenadas del fichero:" << i << std::endl;
+
+            for(unsigned movement = 0; movement < lines.size(); movement ++) {
+                if(lines[movement] != ",") {
+                    x = stoi(lines[movement]);
                 }
                 else
-                    break;
+                    break; 
             }
-            counter = 0;
-            for(unsigned movement = movement + 1; movement < read.size(); movement ++) {
-                value2[counter] = read[movement];
-                counter ++;
-            }
-            
-            read.clear();
-            x = stoi(value1);
-            y = stoi(value2);
+            for(unsigned movement = movement + 1; movement < lines.size(); movement ++) {
+                y = stoi(lines[movement]);
+            } 
 
+            lines.clear();
             if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) {
                 throw "Datos Mal Itroducidos en el TXT";
             }
