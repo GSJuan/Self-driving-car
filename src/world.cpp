@@ -44,7 +44,7 @@ World::World(int row_min, int row_max, int col_min, int col_max){
     }
 }
 
-World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, int obstacle_type){ // inicializamos un mundo con obstaculos colocados aleatoriamente
     row = row_max - row_min;
     column = col_max - col_min;
     size = row * column;
@@ -55,50 +55,82 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
         world[i].SetLowerLimit(col_min);
     }
 
-    int obstacle_quantity = size * obstacle_percentage / 100;
-    if(automatic_obstacle == true){
-        srand(time(NULL)); 
-        for(int i = 0; i < obstacle_quantity; i++) {
+    int obstacle_quantity = size * obstacle_percentage / 100;//Juan arreglar comteplar 0.8
+    switch(obstacle_type) {
+        case 1: 
+                srand(time(NULL)); 
+                for(int i = 0; i < obstacle_quantity; i++) {
 
-            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
-            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+                    int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
+                    int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
 
-            SetWorldState('O', random_row, random_col);
-            SetWorldValue(true, random_row, random_col);
+                    SetWorldState('O', random_row, random_col);
+                    SetWorldValue(true, random_row, random_col);
+                }
+        break;
+
+        case 2:
+
+                int x, y;
+                for(int i = 0; i < obstacle_quantity; i++) {
+                    do {
+                        std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
+                        std::cin >> x;
+                    while ((x < 0) || (x > row_max * 2 - 1)) {
+                        std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                        std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                        std::cin >> x;
+                    }
+                    std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
+                    std::cin >> y;
+                    while ((y < 0) || ( y > col_max * 2 - 1)) {
+                        std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                        std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                        std::cin >> y;
+                    }
+                
+                    } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
+                x += row_min;
+                y += col_min;
+                SetWorldState('O', x, y);
+                SetWorldValue(true, x, y);
         }
-    }
-    else { //Introduccion Manual(Fichero txt)
+        break;
+
+    case 3:
         std::ifstream input_file("obstacle.txt");
-        std::vector<std::string> lines;
-        std::string read;
+        std::string read, number1, number2;
         int x, y;
+        unsigned movement;
 
         if (!input_file.is_open()) {
             throw "Could not open the file - obstacle.txt";
         }
         
-        while(getline(input_file, read)) { //Por defecto viene \n
+        while(getline(input_file, read)) {
             if (read[0] != '/' && read[1] != '/') {
 
-            lines.push_back(read);
-                for (const auto &i : lines)
-                    std::cout<<"Introduciendo coordenadas del fichero:" << i << std::endl;
-
-            for(unsigned movement = 0; movement < lines.size(); movement ++) {
-                if(lines[movement] != ",") {
-                    x = stoi(lines[movement]);
+            for(; movement < read.size(); movement ++) {
+                if(read[movement] != ',') {
+                    number1.push_back(read[movement]);
                 }
-                else
+                else{
+                    movement ++;
                     break; 
+                }
             }
-            for(unsigned movement = movement + 1; movement < lines.size(); movement ++) {
-                y = stoi(lines[movement]);
+            for(; movement < read.size(); movement ++) {
+                number2.push_back(read[movement]);
             } 
 
-            lines.clear();
+            x = stoi(number1);
+            y = stoi(number2);
+
             if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) {
                 throw "Datos Mal Itroducidos en el TXT";
             }
+
+            //catch(std::string& e)
 
             x += row_min;
             y += col_min;
@@ -106,8 +138,9 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
             SetWorldValue(true, x, y);
             }
         }          
-    //} while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
         input_file.close();
+
+    break;
     }
 }
 
