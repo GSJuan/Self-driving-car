@@ -12,11 +12,9 @@
 #include "uber.h"
 #include "vector.h"
 
-#include <fstream>
 #include <iostream>
 #include <random>
 #include "stdio.h"
-#include <sstream>
 
 #pragma once
 
@@ -85,4 +83,8 @@ void PrintGrid (Vehicle*);
 
 bool VehicleOut(Vehicle*);
 void TryPosition(Vehicle*);
+std::vector<int> Dijkstra(int, int);
+
+int** Adjacency_Graph_4(int, int);
+int extraer_min(std::vector<int> dist, std::vector<int>);
 };

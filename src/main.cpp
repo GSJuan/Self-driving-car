@@ -32,7 +32,7 @@ if (menu == 0) {
     obstacle_percentage = 30;
     automatic_obstacles = true;
 }
-else if (menu == 1) {
+else {
     std::cout << "Introduzca el Ancho: ";
     std::cin >> row_min;
     while (row_min < 0) {
@@ -63,13 +63,16 @@ else if (menu == 1) {
         std::cin >> obstacle_percentage;
     }
 
-    std::cout << "¿Desea generacion automatica de obstaculos (0), introducirlos manualmente(1) o por fichero(3)?\n";
-    std::cout << "Introduzca 0, 1 o 2: ";
+    std::cout << "¿Desea generacion automatica de obstaculos (0), o introducirlos manualmente?\n";
+    std::cout << "Introduzca 0 o 1: ";
     std::cin >> obstacle_type;
-    while ((obstacle_type != 0) && (obstacle_type != 1) && (obstacle_type != 2)) {
-        std::cout << "¡Eso no era un 0, 1 o 2! Ojito cuidado. " << std::endl << "Introduzca 0 , 1 o 2: ";
+    while ((obstacle_type != 0) && (obstacle_type != 1)) {
+        std::cout << "¡Eso no era un 1 o un 0! Ojito cuidado. " << std::endl << "Introduzca 0 o 1: ";
         std::cin >> obstacle_type;
     }
+    
+    if(obstacle_type == 1) automatic_obstacles = false;
+    else automatic_obstacles = true;
 
     std::cout << "Introduzca el numero de iteraciones (mayor que 0): " << std:: endl;
     std::cin >> iterations;
@@ -83,7 +86,7 @@ else if (menu == 1) {
 
 
 World* pWorld;
-pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage, obstacle_type);
+pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage, automatic_obstacles);
 
 Vehicle* pvehicle;
 

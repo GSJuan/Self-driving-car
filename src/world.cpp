@@ -44,7 +44,7 @@ World::World(int row_min, int row_max, int col_min, int col_max){
     }
 }
 
-World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, int obstacle_type){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
     row = row_max - row_min;
     column = col_max - col_min;
     size = row * column;
@@ -55,92 +55,45 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
         world[i].SetLowerLimit(col_min);
     }
 
-    int obstacle_quantity = size * obstacle_percentage / 100;//Juan arreglar comteplar 0.8
-    switch(obstacle_type) {
-        case 1: 
-                srand(time(NULL)); 
-                for(int i = 0; i < obstacle_quantity; i++) {
+    int obstacle_quantity = size * obstacle_percentage / 100;
+    if(automatic_obstacle == true){
+        srand(time(NULL)); 
+        for(int i = 0; i < obstacle_quantity; i++) {
 
-                    int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
-                    int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
+            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
 
-                    SetWorldState('O', random_row, random_col);
-                    SetWorldValue(true, random_row, random_col);
-                }
-        break;
-
-        case 2:
-
-                int x, y;
-                for(int i = 0; i < obstacle_quantity; i++) {
-                    do {
-                        std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
-                        std::cin >> x;
-                    while ((x < 0) || (x > row_max * 2 - 1)) {
-                        std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                        std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
-                        std::cin >> x;
-                    }
-                    std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
-                    std::cin >> y;
-                    while ((y < 0) || ( y > col_max * 2 - 1)) {
-                        std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                        std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
-                        std::cin >> y;
-                    }
-                
-                    } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
-                x += row_min;
-                y += col_min;
-                SetWorldState('O', x, y);
-                SetWorldValue(true, x, y);
+            SetWorldState('O', random_row, random_col);
+            SetWorldValue(true, random_row, random_col);
         }
-        break;
-
-    case 3:
-        std::ifstream input_file("obstacle.txt");
-        std::string read, number1, number2;
+    }
+    else {
         int x, y;
-        unsigned movement;
-
-        if (!input_file.is_open()) {
-            throw "Could not open the file - obstacle.txt";
-        }
-        
-        while(getline(input_file, read)) {
-            if (read[0] != '/' && read[1] != '/') {
-
-            for(; movement < read.size(); movement ++) {
-                if(read[movement] != ',') {
-                    number1.push_back(read[movement]);
+        for(int i = 0; i < obstacle_quantity; i++) {
+            do {
+                std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
+                std::cin >> x;
+                while ((x < 0) || (x > row_max * 2 - 1)) {
+                    std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                std::cin >> x;
                 }
-                else{
-                    movement ++;
-                    break; 
+
+                std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
+                std::cin >> y;
+                while ((y < 0) || ( y > col_max * 2 - 1)) {
+                    std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                    std::cin >> y;
                 }
-            }
-            for(; movement < read.size(); movement ++) {
-                number2.push_back(read[movement]);
-            } 
-
-            x = stoi(number1);
-            y = stoi(number2);
-
-            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) {
-                throw "Datos Mal Itroducidos en el TXT";
-            }
-
-            //catch(std::string& e)
+                
+            } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
 
             x += row_min;
             y += col_min;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
-            }
-        }          
-        input_file.close();
-
-    break;
+        }
     }
 }
 
@@ -278,4 +231,53 @@ void World::TryPosition(Vehicle* vehicle){
         std::cout << "el taxi se ha salido del mundo!!!" << std::endl;
         throw(std::exception());
     }
+}
+
+std::vector<int> World::Dijkstra(int origen_x, int origen_y) {
+    int size = GetSize();
+    int** graph = Adjacency_Graph_4(size, GetRow());
+    std::vector<int> dist, visitado;
+    dist.resize(size);
+    visitado.resize(size);
+    int origen = origen_x + GetRow() * origen_y;
+    int u = 0;
+    for (int v = 0; v < size; v++) {
+        dist[v] = INFINITY;
+        visitado[v] = false;
+    }
+    dist[origen] = 0;
+    for (int v = 0; v < size - 1; v++) {
+        u = extraer_min(dist, visitado);
+        visitado[u] = true;
+        for (int v = 0; v < GetSize(); v++) {
+            if (!visitado[v] && graph[u][v] && (dist[u] != INFINITY) && (dist[u] + graph[u][v < dist[v]])) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+    return dist;
+}
+
+int** World::Adjacency_Graph_4(int size, int width) {
+    int** graph = new int * [size];
+    for (int i = 0; i < size; i++)
+        graph[i] = new int [size];
+    
+    for (int i = 0; i < size; i++) {
+        graph[i][i] = 0;
+        if (i + 1 < size) graph[i][i + 1] = 1;
+        if (i - 1 >= 0) graph[i][i - 1] = 1;
+        if (i - width >= 0) graph[i][i - width] = 1;
+        if (i + width < size) graph[i][i + width] = 1;
+    }
+    return graph;
+}
+
+int World::extraer_min(std::vector<int> dist, std::vector<int> visit) {
+    int min = INFINITY, min_index;
+    for (int v = 0; v < dist.size(); v++) {
+        if ((dist[v] < min) && (!visit[v])) 
+            min = dist[v], min_index = v;
+    }
+    return min_index;
 }

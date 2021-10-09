@@ -52,13 +52,16 @@ void Simulation::Loop(void) {
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
     PrintData();
     try {
-        for (int i = 0; i < GetMaxIter(); i++){
+        std::vector<int> ruta = grid->Dijkstra(vehicle->GetRow(), vehicle->GetColumn());
+        int i = 0;
+        for (int nodo : ruta) {
             SetCurrIter(i +1);
             grid->TryPosition(vehicle); //prueba el vehiculo a ver si esta fuera
-            vehicle->Update(*grid);
+            vehicle->Update(*grid, nodo);
             grid->PrintGrid(vehicle);
             std::cout << "Current iteration: " << GetCurrIter() << std::endl;
             PrintData();
+            i++;
         }
     }
     catch (std::exception& e) {
