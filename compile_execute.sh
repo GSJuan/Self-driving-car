@@ -1,3 +1,3 @@
 make
 clear
-.\simulation
+./simulation

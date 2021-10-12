@@ -48,9 +48,10 @@ void Simulation::SetCurrIter(int iteration) {
 }
 
 void Simulation::Loop(void) {
+   
     grid->PrintGrid(vehicle);
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
-    PrintData();
+    PrintData(); 
     try {
         int x = vehicle->GetDestinationColumn(),    y = vehicle->GetDestinationRow();
         x += grid->GetRow() / 2,                    y += grid->GetColumn() / 2;
@@ -60,15 +61,18 @@ void Simulation::Loop(void) {
 
         int i = 0;
         for (int nodo : path) {
-            system("cls");
+            //system("cls");
             SetCurrIter(i + 1);
             grid->TryPosition(vehicle); //prueba el vehiculo a ver si esta fuera
             vehicle->Update(*grid, nodo);
-            grid->PrintGrid(vehicle);
-            std::cout << "Current iteration: " << GetCurrIter() << std::endl;
-            PrintData();
+            //grid->PrintGrid(vehicle);
+            //std::cout << "Current iteration: " << GetCurrIter() << std::endl;
+            //PrintData();
             i++;
         }
+        grid->PrintGrid(vehicle);
+        std::cout << "Current iteration: " << GetCurrIter() << std::endl;
+        PrintData();
     }
     catch (std::exception& e) {
         throw e;
