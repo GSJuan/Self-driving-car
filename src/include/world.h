@@ -23,18 +23,22 @@ class World {
 protected:
 
 int row;
-int column;
+int row_min;
+int row_max;
+
+int col;
+int col_min;
+int col_max;
+
 int size;
 Vector<Vector<Cell>> world;
-
-
 
 public:
 
 World(); //Constructor por defecto
 World(int, int); //Constructor por tamaño
 explicit World(int, int, int, int);
-explicit World(int, int, int, int, int, bool);
+explicit World(int, int, int, bool);
 virtual ~World();//Destructor
 
 inline int GetRow() {
@@ -42,7 +46,7 @@ inline int GetRow() {
 } //devuelve el numero de filas total
 
 inline int GetColumn() {
-    return column;
+    return col;
 } //devuelve el numero de columnas total
 
 inline int GetSize() {
@@ -83,8 +87,9 @@ void PrintGrid (Vehicle*);
 
 bool VehicleOut(Vehicle*);
 void TryPosition(Vehicle*);
-std::vector<int> Dijkstra(int, int);
 
-int** Adjacency_Graph_4(int, int);
-int extraer_min(std::vector<int> dist, std::vector<int>);
+std::pair<std::vector<int>, std::vector<int>> Dijkstra(int);
+std::vector<std::vector<int>> Adjacency_Graph_4();
+std::vector<std::vector<int>> Adjacency_Graph_8();
+int extraer_min(std::vector<int>, std::vector<bool>);
 };

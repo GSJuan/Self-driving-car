@@ -15,8 +15,16 @@ class Taxi: public Vehicle
 
 using Vehicle::Vehicle;
  
-virtual void Turn(int nodo) {
-    std::cout << nodo << std::endl;
+virtual void Turn(int nodo, int grid_row, int grid_col) {
+    int current = GetRow() + grid_row / 2 + grid_row * (GetColumn() + grid_col / 2);
+    if (nodo == current - 1) direction = 1;
+    if (nodo == current - 1 + grid_row) direction = 2;
+    if (nodo == current + grid_row) direction = 3;
+    if (nodo == current + 1 + grid_row) direction = 4;
+    if (nodo == current + 1) direction = 5;
+    if (nodo == current + 1 - grid_row) direction = 6;
+    if (nodo == current - grid_row) direction = 7;
+    if (nodo == current - 1 - grid_row) direction = 8;
 }
 
 virtual void Move(void) {

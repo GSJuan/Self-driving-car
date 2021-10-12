@@ -26,7 +26,7 @@ class Vehicle {
     int destination_col;
     std::vector<bool> sensor;
 
-    virtual void Turn(int) = 0;
+    virtual void Turn(int, int, int) = 0;
 
     virtual void Move(void) = 0; //Hace que la hormiga avance su posición una casilla en función de su dirección
 

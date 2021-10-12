@@ -12,7 +12,7 @@
 #include "include/simulation.h"
 
 int main( void /* int argc, char* argv[]*/ ) {
-    int row_min, row_max, col_min, col_max, iterations, direction, vehicle_row;
+    int row, col, iterations, direction, vehicle_row;
     int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, obstacle_type = -1;
     bool automatic_obstacles;
     std::cout << "¿Desea el comportamiento por defecto del mundo con matriz 20x20 (0), o personalizar la experiencia (1)?\n";
@@ -24,36 +24,28 @@ int main( void /* int argc, char* argv[]*/ ) {
     }
 
 if (menu == 0) {
-    row_min = -10;
-    row_max = 10;
-    col_min = -10;
-    col_max = 10;
+    row = 20;
+    col = 20;
     iterations = 30;
     obstacle_percentage = 30;
     automatic_obstacles = true;
 }
 else {
     std::cout << "Introduzca el Ancho: ";
-    std::cin >> row_min;
-    while (row_min < 0) {
+    std::cin >> row;
+    while (row <= 0) {
         std::cout << "Eso era menor que 0. Ojito Cuidado" << std::endl;
         std::cout << "Introduzca el Ancho: " << std:: endl;
-        std::cin >> row_min;
+        std::cin >> row;
     }
-
-    row_min /= -2;
-    row_max = -row_min;
 
     std::cout << "Introduzca el Alto: ";
-    std::cin >> col_min;
-    while (col_min < 0) {
-        std::cout << "Eso era menor  que 0. Ojito Cuidado" << std::endl;
+    std::cin >> col;
+    while (col <= 0) {
+        std::cout << "Eso era menor que 0. Ojito Cuidado" << std::endl;
         std::cout << "Introduzca el Alto: " << std:: endl;
-        std::cin >> col_min;
+        std::cin >> col;
     }
-
-    col_min /= -2;
-    col_max = -col_min;
 
     std::cout << "Introduzca el porcentaje de obstaculos (entre 0 y 100): " << std:: endl;
     std::cin >> obstacle_percentage;
@@ -83,10 +75,8 @@ else {
     }
 }
 
-
-
 World* pWorld;
-pWorld = new FiniteWorld(row_min, row_max, col_min, col_max, obstacle_percentage, automatic_obstacles);
+pWorld = new FiniteWorld(row, col, obstacle_percentage, automatic_obstacles);
 
 Vehicle* pvehicle;
 
@@ -99,23 +89,23 @@ while ((vehicle_type != 8) && (vehicle_type != 4)) {
 
 std::cout << "Introduzca la coordenada X del taxi: ";
 std::cin >> vehicle_row;
-while ((vehicle_row < 0) || (vehicle_row > row_max * 2 - 1)) {
+while ((vehicle_row <= 0) || (vehicle_row > row)) {
     std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+    std::cout << "Introduzca una coordenada entre " << 1 << " y " << row << std:: endl;
     std::cin >> vehicle_row;
 }
 
-vehicle_row += row_min;
+vehicle_row -= (row / 2 + 1);
 
 std::cout << "Introduzca la coordenada Y del taxi: ";
 std::cin >> vehicle_col;
-while ((vehicle_col < 0) || (vehicle_col > col_max * 2 - 1)) {
+while ((vehicle_col <= 0) || (vehicle_col > col)) {
     std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+    std::cout << "Introduzca una coordenada entre " << 1 << " y " << col << std:: endl;
     std::cin >> vehicle_col;
 }
 
-vehicle_col += col_min;
+vehicle_col -= (col / 2 + 1);
 
 if (vehicle_type == 8) {
     std::cout << "Introduzca la dirección inicial del taxi (entre estas: 1, 2, 3, 4, 5, 6, 7, 8) " << std:: endl;
@@ -138,23 +128,23 @@ if (vehicle_type == 8) {
 do {
     std::cout << "Introduzca la coordenada X de destino: ";
     std::cin >> destination_row;
-    while ((destination_row < 0) || (destination_row > row_max * 2 - 1)) {
+    while ((destination_row <= 0) || (destination_row > row)) {
         std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-        std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+        std::cout << "Introduzca una coordenada entre " << 1 << " y " << row << std:: endl;
     std::cin >> destination_row;
     }
 
-    destination_row += row_min;
+    destination_row -= (row / 2 + 1);
 
     std::cout << "Introduzca la coordenada Y de destino: ";
     std::cin >> destination_col;
-    while ((destination_col < 0) || (destination_col > col_max * 2 - 1)) {
+    while ((destination_col <= 0) || (destination_col > col)) {
         std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-        std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+        std::cout << "Introduzca una coordenada entre " << 1 << " y " << col << std:: endl;
         std::cin >> destination_col;
     }
     
-    destination_col += col_min;
+    destination_col -= (col / 2 + 1);
     
 } while ((pWorld->GetWorldValue(destination_row, destination_col)) == true); //mientras la direccion de origen esté ocupada por un obstaculo se repite el proceso de instertar direccion de origen
 

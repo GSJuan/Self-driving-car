@@ -67,7 +67,7 @@ void Vehicle::SetDirection(int next_direction) {
 
 void Vehicle::Update(World& grid, int nodo) {
     try{
-        Turn(nodo);
+        Turn(nodo, grid.GetRow(), grid.GetColumn());
         grid.ToggleWorldValue(GetRow(), GetColumn());
         grid.SetWorldState('X', GetRow(), GetColumn());
         Move(); 

@@ -11,7 +11,6 @@
 #pragma once
 
 struct Cell {
-
-    bool value; //libre(false) u ocupado (true)
+    bool value = false; //libre(false) u ocupado (true)
     char state = ' '; // X pasó por ahí, " " libre, O obstaculo.
 };

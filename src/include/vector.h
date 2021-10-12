@@ -48,7 +48,7 @@ Vector(const Vector<T>& r_vec){
 
 T& operator[](int index) {
 
-    if((index >= GetLowerLimit()) &&(index < GetUpperLimit()) )
+    if((index >= GetLowerLimit()) && (index < GetUpperLimit()))
         return vector[index - index_zero];
     else 
         throw std::exception();

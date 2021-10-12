@@ -9,14 +9,19 @@
 //herencia del taxi en la clase uber
 
 #include "vehicle.h"
+
 #pragma once
 class Uber: public Vehicle
 {
 
 using Vehicle::Vehicle;
 
-virtual void Turn(int nodo) {
-    std::cout << nodo << std::endl;
+virtual void Turn(int nodo, int grid_row, int grid_col) {
+    int current = GetRow() + grid_row / 2 + grid_row * (GetColumn() + grid_col / 2);
+    if (nodo == current - 1) direction = 1;
+    if (nodo == current + grid_row) direction = 2;
+    if (nodo == current + 1) direction = 3;
+    if (nodo == current - grid_row) direction = 4;
 }
 
 virtual void Move(void) {

@@ -37,4 +37,6 @@ class Simulation {
     void Loop(void);
     void Sort(void);
     void PrintData(void);
+
+    std::vector<int> GetPath(int);
 };

@@ -14,44 +14,52 @@
 
 World::World(){
     row = 10;
-    column = 10;
+    col = 10;
     size = 100;
     world = Vector<Vector<Cell>> (-10,10);
     for(int i = 0; i < 10; i++) {
         world[i].resize(10);
     }
 }
-std::vector<int> a;
-World::World(int row_size, int column_size){
-    row = row_size;
-    column = column_size;
-    size = row * column;
-    world.resize(row_size);
-        for(int i = 0; i < column_size; i++){
-        world[i].resize(column_size);
-    }
-}
 
-World::World(int row_min, int row_max, int col_min, int col_max){
-    row = row_max - row_min;
-    column = col_max - col_min;
-    size = row * column;
+World::World(int row_, int col_) {
+
+    row = row_, col = col_;
+
+    if (row % 2 == 0) row_max = row / 2 - 1;
+    else row_max = row / 2;
+    row_min = row / -2;
+
+    if (col % 2 == 0) col_max = col / 2 - 1;
+    else col_max = col / 2;
+    col_min = col / -2;
+
+    size = row * col;
     world.resize(row);
     world.SetLowerLimit(row_min);
     for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++){
-        world[i].resize(column);
+        world[i].resize(col);
         world[i].SetLowerLimit(col_min);
     }
 }
 
-World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
-    row = row_max - row_min;
-    column = col_max - col_min;
-    size = row * column;
+World::World(int row_, int col_, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+    
+    row = row_, col = col_;
+
+    if (row % 2 == 0) row_max = row / 2 - 1;
+    else row_max = row / 2;
+    row_min = row / -2;
+
+    if (col % 2 == 0) col_max = col / 2 - 1;
+    else col_max = col / 2;
+    col_min = col / -2;
+
+    size = row * col;
     world.resize(row);
     world.SetLowerLimit(row_min);
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++){
-        world[i].resize(column);
+    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+        world[i].resize(col);
         world[i].SetLowerLimit(col_min);
     }
 
@@ -59,7 +67,6 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
     if(automatic_obstacle == true){
         srand(time(NULL)); 
         for(int i = 0; i < obstacle_quantity; i++) {
-
             int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
             int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
 
@@ -97,13 +104,10 @@ World::World(int row_min, int row_max, int col_min, int col_max, int obstacle_pe
     }
 }
 
-
-
 //Destructor
 
 World::~World(){
 }
-
 
 //Getters y Setters
 
@@ -112,8 +116,8 @@ char World::GetWorldState(int i, int j) {
 }
 
 bool World::GetWorldValue(int i, int j) {
-    try{
-       return world[i][j].value; 
+    try {
+       return world[i][j].value;
     }
     
     catch(...){
@@ -126,7 +130,7 @@ void World::SetRow(int row_) {
 }
 
 void World::SetColumn(int column_) {
-    column = column_;
+    col = column_;
 }
 
 void World::SetSize(int size_) {
@@ -233,50 +237,96 @@ void World::TryPosition(Vehicle* vehicle){
     }
 }
 
-std::vector<int> World::Dijkstra(int origen_x, int origen_y) {
-    int size = GetSize();
-    int** graph = Adjacency_Graph_4(size, GetRow());
-    std::vector<int> dist, visitado;
-    dist.resize(size);
-    visitado.resize(size);
-    int origen = origen_x + GetRow() * origen_y;
-    int u = 0;
-    for (int v = 0; v < size; v++) {
-        dist[v] = INFINITY;
-        visitado[v] = false;
-    }
+std::pair<std::vector<int>, std::vector<int>> World::Dijkstra(int origen) {
+    std::vector<std::vector<int>> graph = Adjacency_Graph_4();
+    std::vector<int> dist(size, __INT_MAX__);
+    std::vector<int> prev(size, 0);
+    std::vector<bool> visit(size, false);
+    
     dist[origen] = 0;
-    for (int v = 0; v < size - 1; v++) {
-        u = extraer_min(dist, visitado);
-        visitado[u] = true;
-        for (int v = 0; v < GetSize(); v++) {
-            if (!visitado[v] && graph[u][v] && (dist[u] != INFINITY) && (dist[u] + graph[u][v < dist[v]])) {
+    
+    for (int i = 0; i < size; i++) {
+        int u = extraer_min(dist, visit);
+        visit[u] = true;
+        for (int v = 0; v < size; v++) {
+            if (!visit[v] && graph[u][v] && dist[u] != __INT_MAX__
+                && dist[u] + graph[u][v] < dist[v]) {
                 dist[v] = dist[u] + graph[u][v];
+                prev[v] = u;
             }
         }
     }
-    return dist;
+    return std::pair<std::vector<int>, std::vector<int>> (dist, prev);
 }
 
-int** World::Adjacency_Graph_4(int size, int width) {
-    int** graph = new int * [size];
-    for (int i = 0; i < size; i++)
-        graph[i] = new int [size];
+std::vector<std::vector<int>> World::Adjacency_Graph_4() {
+    std::vector<std::vector<int>> graph;
+    graph.resize(size);
     
+    for (int i = 0; i < size; i++) graph[i].resize(size);
+    
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            graph[i][j] = 0;
+
     for (int i = 0; i < size; i++) {
-        graph[i][i] = 0;
-        if (i + 1 < size) graph[i][i + 1] = 1;
-        if (i - 1 >= 0) graph[i][i - 1] = 1;
-        if (i - width >= 0) graph[i][i - width] = 1;
-        if (i + width < size) graph[i][i + width] = 1;
+        int x = i % row;
+        int y = (i - x) / row;
+        x -= row / 2;
+        y -= col / 2;
+        if (i + 1 < size && x + 1 <= row_max) if (!GetWorldValue(x + 1, y)) 
+            graph[i][i + 1] = 1;
+        if (i - 1 >= 0 && x - 1 >= row_min) if (!GetWorldValue(x - 1, y)) 
+            graph[i][i - 1] = 1;
+        if (i - row >= 0 && y - 1 >= col_min) if (!GetWorldValue(x, y - 1)) 
+            graph[i][i - row] = 1;
+        if (i + row < size && y + 1 <= col_max) if (!GetWorldValue(x, y + 1)) 
+            graph[i][i + row] = 1;
     }
+
     return graph;
 }
 
-int World::extraer_min(std::vector<int> dist, std::vector<int> visit) {
-    int min = INFINITY, min_index;
-    for (int v = 0; v < dist.size(); v++) {
-        if ((dist[v] < min) && (!visit[v])) 
+std::vector<std::vector<int>> World::Adjacency_Graph_8() {
+    std::vector<std::vector<int>> graph;
+    graph.resize(size);
+    
+    for (int i = 0; i < size; i++) graph[i].resize(size);
+    
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            graph[i][j] = 0;
+
+    for (int i = 0; i < size; i++) {
+        int x = i % row;
+        int y = (i - x) / row;
+        x -= row / 2;
+        y -= col / 2;
+        if (i + 1 < size && x + 1 <= row_max) if (!GetWorldValue(x + 1, y)) 
+            graph[i][i + 1] = 1;
+        if (i - 1 >= 0 && x - 1 >= row_min) if (!GetWorldValue(x - 1, y)) 
+            graph[i][i - 1] = 1;
+        if (i - row >= 0 && y - 1 >= col_min) if (!GetWorldValue(x, y - 1)) 
+            graph[i][i - row] = 1;
+        if (i + row < size && y + 1 <= col_max) if (!GetWorldValue(x, y + 1)) 
+            graph[i][i + row] = 1;
+        if (i + 1 + row < size && x + 1 <= row_max && y + 1 <= col_max) if (!GetWorldValue(x + 1, y + 1)) 
+            graph[i][i + 1 + row] = 1;
+        if (i - 1 + row < size && x - 1 >= row_min && y + 1 <= col_max) if (!GetWorldValue(x - 1, y + 1)) 
+            graph[i][i - 1 + row] = 1;
+        if (i + 1 - row >= 0 && x + 1 <= row_max && y - 1 <= col_min) if (!GetWorldValue(x + 1, y - 1)) 
+            graph[i][i + 1 - row] = 1;
+        if (i - 1 - row >= 0 && x - 1 <= row_min && y - 1 <= col_min) if (!GetWorldValue(x - 1, y - 1)) 
+            graph[i][i - 1 - row] = 1;
+    }
+
+    return graph;
+}
+
+int World::extraer_min(std::vector<int> dist, std::vector<bool> visit) {
+    int min = __INT_MAX__, min_index;
+    for (unsigned int v = 0; v < dist.size(); v++) {
+        if (dist[v] <= min && visit[v] == false)
             min = dist[v], min_index = v;
     }
     return min_index;

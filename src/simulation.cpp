@@ -48,14 +48,20 @@ void Simulation::SetCurrIter(int iteration) {
 }
 
 void Simulation::Loop(void) {
-   grid->PrintGrid(vehicle);
+    grid->PrintGrid(vehicle);
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
     PrintData();
     try {
-        std::vector<int> ruta = grid->Dijkstra(vehicle->GetRow(), vehicle->GetColumn());
+        int x = vehicle->GetDestinationColumn(),    y = vehicle->GetDestinationRow();
+        x += grid->GetRow() / 2,                    y += grid->GetColumn() / 2;
+        int end = x + grid->GetRow() * y;
+
+        std::vector<int> path = GetPath(end);
+
         int i = 0;
-        for (int nodo : ruta) {
-            SetCurrIter(i +1);
+        for (int nodo : path) {
+            system("cls");
+            SetCurrIter(i + 1);
             grid->TryPosition(vehicle); //prueba el vehiculo a ver si esta fuera
             vehicle->Update(*grid, nodo);
             grid->PrintGrid(vehicle);
@@ -73,4 +79,26 @@ void Simulation::PrintData(void) {
         std::cout << "vehicle: X = " << vehicle->GetRow() << " Y = " << vehicle->GetColumn() << " Direction: " ;
         vehicle->PrintDirection();
         std::cout << std::endl;
+}
+
+std::vector<int> Simulation::GetPath(int end) {
+    int x = vehicle->GetRow(),  y = vehicle->GetColumn();
+    x += grid->GetRow() / 2,    y += grid->GetColumn() / 2;
+    int source = x + grid->GetRow() * y;
+
+    auto ruta = grid->Dijkstra(source);
+    std::vector<int> path;
+
+    for (int i = end; i != source;) {
+        path.push_back(i);
+        i = ruta.second[i];
+    }
+
+    for (unsigned int i = 0; i < path.size() / 2; i++) {
+        int temp = path[i];
+        path[i] = path[path.size() - 1 - i];
+        path[path.size() - 1 - i] = temp;
+    }
+
+    return path;
 }
