@@ -1,22 +1,15 @@
 import World from './modules/world.js';
 import Vehicle from './modules/vehicle.js';
 
-let alto = 0, ancho = 0;
+let alto = 0, ancho = 0, world = new World(ancho, alto);
 
-$('#alto, #ancho, #obstaculos_input').change(() => {
+$('#alto, #ancho').change(() => {
   removeprev(ancho);
 
   alto = checkNaN($('#alto').val());
   ancho = checkNaN($('#ancho').val());
-  let obstaculos = checkNaN($('#obstaculos_input').val());
-  let direcciones = checkNaN($('#direcciones_input').val());
-  let x_vehiculo = checkNaN($('#x_vehiculo').val());
-  let y_vehiculo = checkNaN($('#y_vehiculo').val());
-  let x_final = checkNaN($('#x_final').val());
-  let y_final = checkNaN($('#y_final').val());
 
-
-  let world = new World(ancho, alto);
+  world = new World(ancho, alto);
 
   world.map.forEach((element, i) => {
     var row = "<div class='row" + i + "' id='row'></div>";
@@ -27,8 +20,12 @@ $('#alto, #ancho, #obstaculos_input').change(() => {
     });
   });
 
-  world.setRandObs(obstaculos);
   setInterval(checkclickworld(world), 10);
+})
+
+$('#obstaculos_input').change(() => {
+  let obstaculos = checkNaN($('#obstaculos_input').val());
+  world.setRandObs(obstaculos);
 })
 
 function checkNaN(num) {

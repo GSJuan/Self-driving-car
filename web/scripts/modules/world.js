@@ -9,6 +9,13 @@ export default class World {
   
   setRandObs(obs_percent = 0) {
     let obs_qty = this.size * obs_percent / 100;
+    for (let i = 0; i < this.row; i++) {
+      for (let j = 0; j < this.row; j++) {
+        this.map[i][j] = 0;
+        $('.row' + i + ' > .col' + j).css('background-color', 'white');
+      }
+    }
+
     for (let i = 0; i < obs_qty; i++) {
       let rand_row = getRandomInt(0, this.row);
       let rand_col = getRandomInt(0, this.col);
