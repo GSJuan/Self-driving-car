@@ -39,7 +39,7 @@ public:
 World(); //Constructor por defecto
 World(int, int); //Constructor por tamaño
 explicit World(int, int, int, int);
-explicit World(int, int, int, int);
+explicit World(int, int, int, int, int);
 virtual ~World();//Destructor
 
 inline int GetRow() {

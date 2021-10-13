@@ -14,7 +14,7 @@
 int main( void /* int argc, char* argv[]*/ ) {
     int row, col, iterations, direction, vehicle_row;
     int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, obstacle_type = -1;
-    bool automatic_obstacles;
+
     std::cout << "¿Desea el comportamiento por defecto del mundo con matriz 20x20 (0), o personalizar la experiencia (1)?\n";
     std::cout << "Introduzca 0 o 1: ";
     std::cin >> menu;
@@ -28,7 +28,7 @@ if (menu == 0) {
     col = 20;
     iterations = 30;
     obstacle_percentage = 30;
-    automatic_obstacles = true;
+    obstacle_type= 0;
 }
 else {
     std::cout << "Introduzca el Ancho: ";
