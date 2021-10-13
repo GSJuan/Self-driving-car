@@ -43,9 +43,10 @@ World::World(int row_, int col_) {
     }
 }
 
-World::World(int row_, int col_, int obstacle_percentage, bool automatic_obstacle){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ // inicializamos un mundo con obstaculos colocados aleatoriamente
     
     row = row_, col = col_;
+    int x, y;
 
     if (row % 2 == 0) row_max = row / 2 - 1;
     else row_max = row / 2;
@@ -64,7 +65,9 @@ World::World(int row_, int col_, int obstacle_percentage, bool automatic_obstacl
     }
 
     int obstacle_quantity = size * obstacle_percentage / 100;
-    if(automatic_obstacle == true){
+    switch (obstacle_type) {
+    case 0:
+
         srand(time(NULL)); 
         for(int i = 0; i < obstacle_quantity; i++) {
             int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
@@ -73,9 +76,11 @@ World::World(int row_, int col_, int obstacle_percentage, bool automatic_obstacl
             SetWorldState('O', random_row, random_col);
             SetWorldValue(true, random_row, random_col);
         }
-    }
-    else {
-        int x, y;
+        break;
+    
+
+
+    case 1:
         for(int i = 0; i < obstacle_quantity; i++) {
             do {
                 std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
@@ -101,7 +106,65 @@ World::World(int row_, int col_, int obstacle_percentage, bool automatic_obstacl
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
         }
+
+        break;
+    
+    case 2:
+        try {
+        std::ifstream input_file("obstacle.txt");
+        std::string read, number1, number2;
+        unsigned movement = 0;
+
+        if (!input_file.is_open()) throw 0;
+        
+        while(getline(input_file, read)) {
+            if (read[0] != '/' && read[1] != '/') {
+
+            for(; movement < read.size(); movement ++) {
+                if(read[movement] != ',') {
+                    number1.push_back(read[movement]);
+                }
+                else{
+                    movement ++;
+                    break; 
+                }
+            }
+            for(; movement < read.size(); movement ++) {
+                number2.push_back(read[movement]);
+            } 
+
+            x = stoi(number1);
+            y = stoi(number2);
+            number1.clear();
+            number2.clear();
+            movement = 0;
+
+            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) throw 1;
+
+            x += row_min;
+            y += col_min;
+            SetWorldState('O', x, y);
+            SetWorldValue(true, x, y);
+            }
+        }          
+        input_file.close();
+
     }
+    catch(int& error) {
+        switch (error)
+        {
+        case 0:
+            std::cout<<"No se pudo abrir el archivo - obstacle.txt"<<std::endl;
+            break;
+        
+        case 1:
+            std::cout<<"Datos mal introducidos"<<std::endl;
+            break;
+        }
+    }
+
+    break;
+    }   
 }
 
 //Destructor
