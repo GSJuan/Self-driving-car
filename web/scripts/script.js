@@ -1,24 +1,17 @@
 import World from './modules/world.js';
 import Vehicle from './modules/vehicle.js';
 
-let alto = 0, ancho = 0, world = new World(ancho, alto);
+let alto = 0, ancho = 0;
+let world = new World(ancho, alto);
+let vehicle = new Vehicle(0, 0);
 
 $('#alto, #ancho').change(() => {
-  removeprev(ancho);
+  world.clear();
 
   alto = checkNaN($('#alto').val());
   ancho = checkNaN($('#ancho').val());
 
   world = new World(ancho, alto);
-
-  world.map.forEach((element, i) => {
-    var row = "<div class='row" + i + "' id='row'></div>";
-    $('.table').append(row);
-    element.forEach((element, j) => {
-      var col = "<div class='col" + j + "' id='col'></div>";
-      $('.row' + i).append(col);
-    });
-  });
 
   setInterval(checkclickworld(world), 10);
 })
@@ -28,16 +21,27 @@ $('#obstaculos_input').change(() => {
   world.setRandObs(obstaculos);
 })
 
+$('#x_vehiculo, #y_vehiculo').change(() => {
+  vehicle.clear();
+  
+  let x = checkNaN($('#x_vehiculo').val());
+  let y = checkNaN($('#y_vehiculo').val());
+
+  vehicle = new Vehicle(x, y);
+})
+
+$('#x_final, #y_final').change(() => {
+  vehicle.clearfinal();
+  
+  let x = checkNaN($('#x_final').val());
+  let y = checkNaN($('#y_final').val());
+
+  vehicle.setfinal(x, y);
+})
+
 function checkNaN(num) {
   if (Number.isNaN(parseInt(num))) return undefined;
   return parseInt(num);
-}
-
-function removeprev(ancho) {
-  if (ancho === undefined) ancho = 10;
-  for (let i = 0; i < ancho; i++) {
-    $('.row' + i).remove();
-  }
 }
 
 function checkclickworld(world) {

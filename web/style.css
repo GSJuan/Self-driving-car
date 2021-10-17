@@ -137,6 +137,10 @@ input:hover{
 }
 
 .table #col {
-  border: .1vh solid grey;
-  display: table-cell;
+  /*border: 1px solid grey;
+  */display: table-cell;
+}
+
+.car, .final {
+  position: absolute;
 }
