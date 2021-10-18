@@ -1,4 +1,10 @@
+import * as f from './functions.js'
+
+// Fichero que contiene la clase World
 export default class World {
+  // Contructor por defecto que pasa los parámetros de filas y columnas
+  // Crea un array de arrays
+  // Y por cada array, crea una fila y recorre cada array creando una columna
   constructor(row = 10, col = 10) {
     this.row = row;
     this.col = col;
@@ -15,7 +21,10 @@ export default class World {
       });
     });
   }
-  
+
+  // Método para crear Objetos de forma aleatoria
+  // Resetea todos los obstáculos a 0, y de forma aleatoria si no había un objeto anteriormente, lo coloca
+  // Si había uno vuelve a comprobar
   setRandObs(obs_percent = 0) {
     let obs_qty = this.size * obs_percent / 100;
     for (let i = 0; i < this.row; i++) {
@@ -26,8 +35,8 @@ export default class World {
     }
 
     for (let i = 0; i < obs_qty; i++) {
-      let rand_row = getRandomInt(0, this.row);
-      let rand_col = getRandomInt(0, this.col);
+      let rand_row = f.getRandomInt(0, this.row);
+      let rand_col = f.getRandomInt(0, this.col);
 
       if (this.map[rand_row][rand_col]) i--;
       else {
@@ -37,14 +46,11 @@ export default class World {
     }
   }
 
+  // Elimina las filas y columnas
   clear() {
     if (this.ancho === undefined) this.ancho = 10;
     for (let i = 0; i < this.ancho; i++) {
       $('.row' + i).remove();
     }
   }
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
 }
