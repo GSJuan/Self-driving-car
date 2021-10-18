@@ -1,0 +1,25 @@
+/* En este fichero se establece como se debe ver el tablero de juego */
+
+.table {
+  position: absolute;
+  background-color: white;
+  width: 45%;
+  height: 90%;
+  top: 7.5%;
+  right: 12%;
+  box-shadow: 0 0 5vh black;
+  display: table;
+}
+
+.table #row {
+  display: table-row;
+}
+
+.table #col {
+  border: 1px solid grey;
+  display: table-cell;
+}
+
+.car, .final {
+  position: absolute;
+}
