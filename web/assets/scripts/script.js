@@ -49,3 +49,10 @@ $('#x_final, #y_final').on("change", () => {
 
   vehicle.setfinal(x, y);
 })
+
+$('#grid').on("change", () => {
+  if ($('#grid').is(":checked"))
+    $('.table #col').css('border', '1px solid grey');
+  else 
+    $('.table #col').css('border', '0px solid grey');
+})

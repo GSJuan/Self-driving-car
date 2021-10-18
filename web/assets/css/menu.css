@@ -7,7 +7,7 @@
   box-shadow: 0 0 2vh black;
   padding: 12vh 8vh;
   grid-template-columns: 20vh 20vh;
-  grid-template-rows: 4vh 8vh 4vh 8vh 4vh 8vh 4vh 8vh 4vh 28vh;
+  grid-template-rows: 4vh 8vh 4vh 8vh 4vh 8vh 4vh 8vh 4vh 8vh 28vh;
   font-size: 3vh;
 }
 
