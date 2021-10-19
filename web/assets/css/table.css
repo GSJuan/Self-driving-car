@@ -21,4 +21,14 @@
 
 .car, .final {
   position: absolute;
+  object-fit: cover;
+  user-select: none;
+}
+
+.car {
+  background-color: #528BEB;
+}
+
+.final {
+  background-color: #ff0000;
 }

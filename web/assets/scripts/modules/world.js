@@ -29,7 +29,7 @@ export default class World {
   // Método para crear Objetos de forma aleatoria
   // Resetea todos los obstáculos a 0, y de forma aleatoria si no había un objeto anteriormente, lo coloca
   // Si había uno vuelve a comprobar
-  setRandObs(obs_percent = 0) {
+  setRandObs(obs_percent = 0, vehicle = null) {
     let obs_qty = this.size * obs_percent / 100;
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.row; j++) {
@@ -38,15 +38,23 @@ export default class World {
       }
     }
 
+    let trys = 0;
     for (let i = 0; i < obs_qty; i++) {
       let rand_row = f.getRandomInt(0, this.row);
       let rand_col = f.getRandomInt(0, this.col);
 
-      if (this.map[rand_row][rand_col]) i--;
+      if (this.map[rand_row][rand_col] || 
+        (vehicle.x == rand_col && vehicle.y == rand_row) || 
+        (vehicle.x_final == rand_col && vehicle.y_final == rand_row)) {
+          i--;
+          trys++;
+        }
       else {
         this.map[rand_row][rand_col] = 1;
         $('#row' + rand_row + ' > #col' + rand_col).css('background-color', 'black');
+        trys = 0;
       }
+      if (trys == 1000) return;
     }
   }
 
