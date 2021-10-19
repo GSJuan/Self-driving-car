@@ -16,7 +16,7 @@ export default class Vehicle {
 
   // Crea el final de donde la clase Vehiculo debe llegar y lo visualiza
   // Primero copia los parámetros e incluye la imagen del final en la fila x_final y columna y_final
-  setfinal(x, y) {
+  setfinal(x = 0, y = 0) {
     this.x_final = x;
     this.y_final = y;
 
