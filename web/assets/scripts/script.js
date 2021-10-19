@@ -13,15 +13,19 @@ let vehicle = new Vehicle(0, 0);
 // Declara la creación de la clase World con el cambio de los inputs ancho y alto y comprueba si clickas en él
 // Primero limpia world por si hay uno previo, luego obtiene los valores de alto y ancho y crea el mundo
 // Por último crea una función asíncrona para checkear si clickas en el mundo y nunca termina
+
 $('#alto, #ancho').on("change", () => {
   world.clear();
-
+  
   alto = f.checkNaN($('#alto').val());
   ancho = f.checkNaN($('#ancho').val());
-
+  
   world = new World(ancho, alto);
 
+  var startTime = performance.now();
   setInterval(f.checkclickworld(world), 10);
+  var endTime = performance.now();
+  console.log(endTime - startTime)
 })
 
 // Controla los cambios del input del % de obstaculos y llama al método del mundo
@@ -49,10 +53,10 @@ $('#x_final, #y_final').on("change", () => {
 
   vehicle.setfinal(x, y);
 })
-
+  
 $('#grid').on("change", () => {
   if ($('#grid').is(":checked"))
-    $('.table #col').css('border', '1px solid grey');
+    $('.table .col').css('border', '1px solid grey');
   else 
-    $('.table #col').css('border', '0px solid grey');
-})
+    $('.table .col').css('border', '0px solid grey');
+});

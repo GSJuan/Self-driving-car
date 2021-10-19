@@ -11,11 +11,11 @@
   display: table;
 }
 
-.table #row {
+.table .row {
   display: table-row;
 }
 
-.table #col {
+.table .col {
   display: table-cell;
 }
 

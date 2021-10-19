@@ -10,16 +10,20 @@ export default class World {
     this.col = col;
     this.size = this.row * this.col;
     this.map = Array(this.row);
-    for (let i = 0; i < row; i++) this.map[i] = new Array(this.col).fill(0);
-
-    this.map.forEach((element, i) => {
-      var row = "<div class='row" + i + "' id='row'></div>";
-      $('.table').append(row);
-      element.forEach((element, j) => {
-        var col = "<div class='col" + j + "' id='col'></div>";
-        $('.row' + i).append(col);
-      });
-    });
+    let i = 0;
+    var html = '';
+    while (i < this.row) {
+      this.map[i] = new Array(this.col).fill(0);
+      html += "<div class='row' id='row" + i + "'>";
+      let j = 0;
+      while (j < this.col) {
+        html += "<div class='col' id='col" + j + "' style='border: 1px solid grey;'></div>";
+        ++j;
+      }
+      html += "</div>";
+      ++i;
+    }
+    $('.table').append(html);
   }
 
   // Método para crear Objetos de forma aleatoria
@@ -30,7 +34,7 @@ export default class World {
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.row; j++) {
         this.map[i][j] = 0;
-        $('.row' + i + ' > .col' + j).css('background-color', 'white');
+        $('#row' + i + ' > #col' + j).css('background-color', 'white');
       }
     }
 
@@ -41,16 +45,15 @@ export default class World {
       if (this.map[rand_row][rand_col]) i--;
       else {
         this.map[rand_row][rand_col] = 1;
-        $('.row' + rand_row + ' > .col' + rand_col).css('background-color', 'black');
+        $('#row' + rand_row + ' > #col' + rand_col).css('background-color', 'black');
       }
     }
   }
 
   // Elimina las filas y columnas
   clear() {
-    if (this.ancho === undefined) this.ancho = 10;
-    for (let i = 0; i < this.ancho; i++) {
-      $('.row' + i).remove();
-    }
+    if (this.row === undefined) this.row = 10;
+    for (let i = 0; i < this.row; i++) 
+      $('#row' + i).remove();
   }
 }
