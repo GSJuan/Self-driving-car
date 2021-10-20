@@ -17,7 +17,6 @@ export function checkclickworld(world, vehicle) {
 
       if ((vehicle.x != j || vehicle.y != i) && 
         (vehicle.x_final != j || vehicle.y_final != i)) {
-          console.log(1)
         if (world.map[i][j] == 0) {
           current.css('background-color', 'black');
           world.map[i][j] = 1;
@@ -36,7 +35,6 @@ export function checkclickworld(world, vehicle) {
 
     if ((vehicle.x != j || vehicle.y != i) && 
         (vehicle.x_final != j || vehicle.y_final != i)) {
-          console.log(i, j)
         if (world.map[i][j] == 0) {
           current.css('background-color', 'black');
           world.map[i][j] = 1;
