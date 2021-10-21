@@ -73,3 +73,9 @@ $('#grid').on("click", () => {
     check_grid = true;
   }
 });
+
+let table = $('.table-content');
+table.on("scroll", () => {
+  let currentsize = table.css()
+  $('.table-content').css("transform", "scale(" + _ + "%)");
+});
