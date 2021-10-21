@@ -7,9 +7,11 @@
 // Compilation: make
 // Execution: ./simulation
 // Clase Simulation que define la relacion entre taxi y entorno (clase world)
+ 
+#include <chrono>
 
 #include "finite_world.h"
-
+ 
 #pragma once
 
 class Simulation {

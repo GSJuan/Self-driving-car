@@ -43,7 +43,7 @@ World::World(int row_, int col_) {
     }
 }
 
-World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ // inicializamos un mundo con obstaculos colocados aleatoriamente
+World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //inicializamos un mundo con obstaculos 
     
     row = row_, col = col_;
     int x, y;
@@ -167,6 +167,143 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
     }   
 }
 
+World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int heuristic_type){ //inicializamos un mundo con tipos de heuristicas y tipos de introducion de obstaculos
+    
+    row = row_, col = col_;
+    int x, y;
+
+    if (row % 2 == 0) row_max = row / 2 - 1;
+    else row_max = row / 2;
+    row_min = row / -2;
+
+    if (col % 2 == 0) col_max = col / 2 - 1;
+    else col_max = col / 2;
+    col_min = col / -2;
+
+    size = row * col;
+    world.resize(row);
+    world.SetLowerLimit(row_min);
+    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+        world[i].resize(col);
+        world[i].SetLowerLimit(col_min);
+    }
+
+    switch(heuristic_type) {
+        case 0:
+            //heuristica = new d_manhattan;
+
+        case 1:
+            //heuristica = new d_euclidea;
+
+        case 2:
+           // heuristica = new d_tchebysev;
+           ;
+    }
+
+    int obstacle_quantity = size * obstacle_percentage / 100;
+    switch (obstacle_type) {
+    case 0:
+
+        srand(time(NULL)); 
+        for(int i = 0; i < obstacle_quantity; i++) {
+            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
+            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+
+            SetWorldState('O', random_row, random_col);
+            SetWorldValue(true, random_row, random_col);
+        }
+        break;
+    
+
+
+    case 1:
+        for(int i = 0; i < obstacle_quantity; i++) {
+            do {
+                std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
+                std::cin >> x;
+                while ((x < 0) || (x > row_max * 2 - 1)) {
+                    std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                std::cin >> x;
+                }
+
+                std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
+                std::cin >> y;
+                while ((y < 0) || ( y > col_max * 2 - 1)) {
+                    std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                    std::cin >> y;
+                }
+                
+            } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
+
+            x += row_min;
+            y += col_min;
+            SetWorldState('O', x, y);
+            SetWorldValue(true, x, y);
+        }
+
+        break;
+    
+    case 2:
+        try {
+        std::ifstream input_file("obstacle.txt");
+        std::string read, number1, number2;
+        unsigned movement = 0;
+
+        if (!input_file.is_open()) throw 0;
+        
+        while(getline(input_file, read)) {
+            if (read[0] != '/' && read[1] != '/') {
+
+            for(; movement < read.size(); movement ++) {
+                if(read[movement] != ',') {
+                    number1.push_back(read[movement]);
+                }
+                else{
+                    movement ++;
+                    break; 
+                }
+            }
+            for(; movement < read.size(); movement ++) {
+                number2.push_back(read[movement]);
+            } 
+
+            x = stoi(number1);
+            y = stoi(number2);
+            number1.clear();
+            number2.clear();
+            movement = 0;
+
+            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) throw 1;
+
+            x += row_min;
+            y += col_min;
+            SetWorldState('O', x, y);
+            SetWorldValue(true, x, y);
+            }
+        }          
+        input_file.close();
+
+    }
+    catch(int& error) {
+        switch (error)
+        {
+        case 0:
+            std::cout<<"No se pudo abrir el archivo - obstacle.txt"<<std::endl;
+            break;
+        
+        case 1:
+            std::cout<<"Datos mal introducidos"<<std::endl;
+            break;
+        }
+    }
+
+    break;
+    }   
+}
+
+
 //Destructor
 
 World::~World(){
@@ -175,12 +312,12 @@ World::~World(){
 //Getters y Setters
 
 char World::GetWorldState(int i, int j) {
-    return world[i][j].state;
+    return world[i][j].GetState();
 }
 
 bool World::GetWorldValue(int i, int j) {
     try {
-       return world[i][j].value;
+       return world[i][j].GetValue();
     }
     
     catch(...){
@@ -201,20 +338,20 @@ void World::SetSize(int size_) {
 }
 
 void World::SetWorldState(char state_, int i, int j) {
-    world[i][j].state = state_;
+    world[i][j].SetState(state_);
 }
 
 void World::SetWorldValue(bool value_, int i, int j) {
-    world[i][j].value = value_;
+    world[i][j].SetValue(value_);
 }
 
 void World::ToggleWorldValue(int i, int j){
     
-   if(world[i][j].value == false){
-        world[i][j].value = true;
+   if(world[i][j].GetValue() == false){
+        world[i][j].SetValue(true);
    }
    else {
-        world[i][j].value = false;
+        world[i][j].SetValue(false);
    }  
 }
 

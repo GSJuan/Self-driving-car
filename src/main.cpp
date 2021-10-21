@@ -13,7 +13,7 @@
 
 int main( void /* int argc, char* argv[]*/ ) {
     int row, col, iterations, direction, vehicle_row;
-    int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, obstacle_type = -1;
+    int vehicle_col, menu, vehicle_type, destination_row, destination_col, obstacle_percentage, obstacle_type = -1, heuristic_type = -1;
 
     std::cout << "¿Desea el comportamiento por defecto del mundo con matriz 20x20 (0), o personalizar la experiencia (1)?\n";
     std::cout << "Introduzca 0 o 1: ";
@@ -29,6 +29,7 @@ if (menu == 0) {
     iterations = 30;
     obstacle_percentage = 30;
     obstacle_type= 0;
+    heuristic_type = 0;
 }
 else {
     std::cout << "Introduzca el Ancho: ";
@@ -55,14 +56,21 @@ else {
         std::cin >> obstacle_percentage;
     }
 
-    std::cout << "¿Desea generacion automatica de obstaculos (0), o introducirlos manualmente(1) o por fichero(2)?\n";
+    std::cout << "¿Desea generacion automatica de obstaculos (0), introducirlos manualmente(1) o por fichero(2)?\n";
     std::cout << "Introduzca 0, 1 o 2: ";
     std::cin >> obstacle_type;
     while ((obstacle_type != 0) && (obstacle_type != 1) && (obstacle_type != 2)) {
         std::cout << "¡Eso no era un 1 o un 0! Ojito cuidado. " << std::endl << "Introduzca 0, 1 o 2: ";
         std::cin >> obstacle_type;
     }
-
+    
+    std::cout << "¿Desea empleaar una función heurística Manhattan (0), Euclídea (1) o por fichero(2)?\n";
+    std::cout << "Introduzca 0, 1 o 2: ";
+    std::cin >> heuristic_type;
+    while ((heuristic_type != 0) && (heuristic_type != 1) && (heuristic_type != 2)) {
+        std::cout << "¡Eso no era un 1 o un 0! Ojito cuidado. " << std::endl << "Introduzca 0, 1 o 2: ";
+        std::cin >> heuristic_type;
+    }
 
     std::cout << "Introduzca el numero de iteraciones (mayor que 0): " << std:: endl;
     std::cin >> iterations;

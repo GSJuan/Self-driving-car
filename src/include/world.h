@@ -11,11 +11,11 @@
 #include "taxi.h"
 #include "uber.h"
 #include "vector.h"
+#include  "f_heuristicas.h"
 
 #include <fstream>
 #include <iostream>
 #include <random>
-#include "stdio.h"
 
 #pragma once
 
@@ -34,12 +34,14 @@ int col_max;
 int size;
 Vector<Vector<Cell>> world;
 
+f_heuristica* heuristica;
+
 public:
 
 World(); //Constructor por defecto
 World(int, int); //Constructor por tamaño
-explicit World(int, int, int, int);
-explicit World(int, int, int, int, int);
+explicit World(int, int, int, int); //constructor con tipo de insercion de obstaculos
+explicit World(int, int, int, int, int); //constructor con tipo de heuristica y de insercion de obstaculos
 virtual ~World();//Destructor
 
 inline int GetRow() {

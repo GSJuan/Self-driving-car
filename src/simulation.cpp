@@ -48,7 +48,11 @@ void Simulation::SetCurrIter(int iteration) {
 }
 
 void Simulation::Loop(void) {
-   
+
+    using Time = std::chrono::steady_clock; //reloj de std::chrono
+
+    auto start_time = Time::now(); //inicio del cronometro
+
     grid->PrintGrid(vehicle);
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
     PrintData(); 
@@ -64,15 +68,17 @@ void Simulation::Loop(void) {
             //system("cls");
             SetCurrIter(i + 1);
             grid->TryPosition(vehicle); //prueba el vehiculo a ver si esta fuera
-            vehicle->Update(*grid, nodo);
+            vehicle->Update(*grid, nodo); //realiza el movimiento del vehiculo en el mundo
             //grid->PrintGrid(vehicle);
             //std::cout << "Current iteration: " << GetCurrIter() << std::endl;
             //PrintData();
             i++;
         }
+        auto end_time = std::chrono::duration_cast<std::chrono::milliseconds>(Time::now() - start_time).count();
         grid->PrintGrid(vehicle);
         std::cout << "Current iteration: " << GetCurrIter() << std::endl;
         PrintData();
+        std::cout << "Time elapsed in ms: " << end_time << "\n"; //cálculo de la duración del algoritmo, se resta el momento de finalización menos el de inicio
     }
     catch (std::exception& e) {
         throw e;

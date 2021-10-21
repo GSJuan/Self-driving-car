@@ -8,11 +8,12 @@
 // Execution: ./simulation
 //clase vector que acepta indices negativos
 
+#include "cell.h"
+
 #include <vector>
 #include <cassert>
 #include <iostream>
 #include <iomanip>
-#include "cell.h"
 
 #pragma once
 
