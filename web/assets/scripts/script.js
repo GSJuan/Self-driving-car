@@ -66,7 +66,7 @@ $('#x_final, #y_final').on("change", () => {
 let check_grid = false;
 $('#grid').on("click", () => {
   if (check_grid) {
-    $('.col').css('border', '1em solid grey');
+    $('.col').css('border', '1px solid grey');
     check_grid = false;
   } else {
     $('.col').css('border', '0 solid grey');
