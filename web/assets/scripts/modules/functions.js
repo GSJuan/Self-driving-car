@@ -97,13 +97,6 @@ export function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export function grid() {
-  if ($('#grid').is(":checked"))
-    $('.table .col').css('border', '1px solid grey');
-  else 
-    $('.table .col').css('border', '0px solid grey');
-}
-
 export function borderinterval() {
   setInterval(() => {
     setTimeout(() => {

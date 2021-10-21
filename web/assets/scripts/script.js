@@ -7,10 +7,10 @@ import './modules/jquery.js';
 // Primero se importan los demas archivos JS y se declaran las variables globales
 
 let alto = 10, ancho = 10;
-let world = new World(ancho, alto);
+let world = new World();
 let vehicle = new Vehicle(0, alto / 2 - 1, world);
 vehicle.setfinal(ancho - 1, alto / 2 - 1, world);
-let id1 = setInterval(f.checkclickworld(world, vehicle), 10);
+let id1 = setInterval(f.checkclickworld(world, vehicle));
 let id2 = setInterval(f.checkmovevehicle(vehicle, world));
 let id3 = setInterval(f.checkmovefinal(vehicle, world));
 f.borderinterval();
@@ -29,10 +29,6 @@ $('#alto, #ancho').on("change", () => {
 
   clearInterval(id1)
   id1 = setInterval(f.checkclickworld(world, vehicle));
-  clearInterval(id2)
-  id2 = setInterval(f.checkmovevehicle(vehicle, world));
-  clearInterval(id3)
-  id3 = setInterval(f.checkmovefinal(vehicle, world));
 })
 
 // Controla los cambios del input del % de obstaculos y llama al método del mundo
@@ -50,12 +46,8 @@ $('#x_vehiculo, #y_vehiculo').on("change", () => {
 
   vehicle = new Vehicle(x, y, world);
 
-  clearInterval(id1)
-  id1 = setInterval(f.checkclickworld(world, vehicle));
   clearInterval(id2)
   id2 = setInterval(f.checkmovevehicle(vehicle, world));
-  clearInterval(id3)
-  id3 = setInterval(f.checkmovefinal(vehicle, world));
 })
 
 // Controla los cambios del input del destino final y los introduce en el método de vehiculo
@@ -66,21 +58,18 @@ $('#x_final, #y_final').on("change", () => {
   let y = f.checkNaN($('#y_final').val());
 
   vehicle.setfinal(x, y, world);
-
-  clearInterval(id1)
-  id1 = setInterval(f.checkclickworld(world, vehicle));
-  clearInterval(id2)
-  id2 = setInterval(f.checkmovevehicle(vehicle, world));
+  
   clearInterval(id3)
   id3 = setInterval(f.checkmovefinal(vehicle, world));
 })
 
-$('#grid').on("change", () => {
-  if ($('#grid').is(":checked")) {
-    $('.col').css('border', '1px solid grey');
-    $('.car, .final').css('border', '0px solid black');
+let check_grid = false;
+$('#grid').on("click", () => {
+  if (check_grid) {
+    $('.col').css('border', '1em solid grey');
+    check_grid = false;
   } else {
-    $('.col').css('border', '0px solid grey');
-    $('.car, .final').css('border', '1px solid black')
+    $('.col').css('border', '0 solid grey');
+    check_grid = true;
   }
 });
