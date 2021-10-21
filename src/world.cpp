@@ -342,7 +342,7 @@ void World::PrintWorld(void) {
 
 void World::PrintHorizontalWall(void) {   
     for(int i = 0; i < world[0].size() + 2; i++){
-        std::cout << "-";
+        std::cout<<termcolor::on_bright_grey << "-"<<termcolor::reset;
     }
     std::cout << std::endl;
 }
@@ -363,16 +363,16 @@ void World::PrintHorizontalWall(void) {
 void World::PrintGrid(Vehicle* vehicle){
     PrintHorizontalWall();
         for(int i = 0; i < world.size(); i++) { 
-            std::cout << "|";
+            std::cout << termcolor::on_bright_grey<<"|"<<termcolor::reset;
             for(int j = 0; j < world[i].size(); j++) {
                 if((i == vehicle->GetRow()) && (j == vehicle->GetColumn()))
                     vehicle->PrintDirection();
-                else if ((i == vehicle->GetDestinationRow()) && (j == vehicle->GetDestinationColumn())){
-                    std::cout << "\u2691";
+                else if ((i == vehicle->GetDestinationRow()) && (j == vehicle->GetDestinationColumn())){ 
+                    std::cout <<termcolor::on_blue << "\u2691" << termcolor::reset;
                 }
-                else std::cout << GetWorldState(i,j);
+                else std::cout<<termcolor::on_white << GetWorldState(i,j)<<termcolor::reset;
             }
-            std::cout << "|" << std::endl;
+            std::cout<<termcolor::on_bright_grey<< "|" <<termcolor::reset<< std::endl;
         }
     PrintHorizontalWall();
 }
@@ -489,3 +489,110 @@ int World::extraer_min(std::vector<int> dist, std::vector<bool> visit) {
     }
     return min_index;
 }
+
+/* bool 
+World::IsInSet(const Cell& c, const std::vector<Cell>& s){
+    for(unsigned int i = 0; i < s.size(); i++)
+        if(s[i].getX()==c.getX() && s[i].getY()==c.getY())
+            return true;
+
+    return false;
+}
+
+void 
+World::ReconstruirCamino(std::vector<Cell> &v, Cell actual, Cell I){
+    Cell a = actual;
+    v.push_back(a);
+    while(a.getX() != I.getX() || a.getY() != I.getY()) {           //Mientras no llegue a la Cell inicial
+        a = world[static_cast<unsigned int>(a.getPadre().first)][static_cast<unsigned int>(a.getPadre().second)];
+        v.push_back(a);
+    }
+}
+
+void 
+World::CambiarHeuristica(bool opt){
+    //delete heuristica_;
+    if(opt){
+        //Manhattan
+        heuristica_ = new d_manhattan();
+    }
+    else{
+        //Euclidea
+        heuristica_ = new d_euclidea();
+    }
+}
+std::vector<Cell> 
+World::Astar(unsigned int xInicio, unsigned int yInicio, unsigned int xFinal, unsigned int yFinal){
+
+    std::vector<std::vector<int>> graph = AdjacencyGraph4();
+
+    std::vector<Cell> result;     // Almacena el camino optimo
+    std::vector<Cell> setAbierto; //adyacentes disponibles
+    std::vector<Cell> setCerrado; //adyacentes no disponibles
+
+    Cell& Inicial = world[xInicio][yInicio];
+    Cell& Final = world[xFinal][yFinal];
+
+    Inicial.setg_(0);                                                   //Cambiamos valores heuristicos de la primera Cell
+    Inicial.setf_((*heuristica_)(Inicial, Final));
+
+    setAbierto.push_back(Inicial);                                      //Setup completada
+    contador++;
+
+    while(!setAbierto.empty()){
+        unsigned int winner = 0;
+        for(unsigned int i = 0; i < setAbierto.size(); i++){            //Se busca la Cell con menor f_valor
+            if(setAbierto[i].getf_() < setAbierto[winner].getf_())
+                winner = i;
+        }
+
+        //Cell copia a la que tenemos en el mundo y en el set.
+        Cell actual = world[setAbierto[winner].getX()][setAbierto[winner].getY()];
+
+        if((actual.getX() == xFinal) && (yFinal == actual.getY())){     //Es la misma Cell -> Hemos llegado al final con camino óptimo
+            ReconstruirCamino(result, actual, Inicial);
+            return result;
+        }
+
+        setAbierto.erase(setAbierto.begin() + winner);                  //Cambiamos actual de set
+        setCerrado.push_back(actual);
+
+        for(int i = 0; i < actual.sizeVecinos(); i++){                  //Miramos los vecinos de la Cell actual
+            int x = actual.getVecino(i).first;
+            int y = actual.getVecino(i).second;
+            Cell vecino = world[x][y];                              //Valor copia de la Cell vecina
+
+            if(IsInSet(vecino, setCerrado))
+                continue;
+
+            int tent_g = actual.getg_() + 1; //Aumento coste en uno por desplazarme de nodo
+
+            if(!IsInSet(vecino, setAbierto)){ //Comprobar si set esta en lista abierta
+                setAbierto.push_back(vecino);
+                contador++;
+            }
+            else if(tent_g >= vecino.getg_())
+                continue;
+
+            //Este camino es el mejor! Guárdalo
+            world[vecino.getX()][vecino.getY()].setPadre(actual);
+            world[vecino.getX()][vecino.getY()].setg_(tent_g);
+            world[vecino.getX()][vecino.getY()].setf_(tent_g + (*heuristica_)(vecino, Final));
+        }
+    }
+    return result;
+}
+
+
+void World::CaminoMinimo(unsigned int xInicio, unsigned int yInicio, unsigned int xFinal, unsigned int yFinal){
+
+    long t0,t1;
+
+    t0 = clock();
+    std::vector<Cell> result = Astar(xInicio, yInicio, xFinal, yFinal);
+    t1 = clock();
+
+    double time = (double(t1-t0)/CLOCKS_PER_SEC);
+
+    std::cout << "Tamano resultado: " << result.size() << std::endl << "Tiempo de ejecucion: " << time;
+} */

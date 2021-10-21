@@ -13,6 +13,7 @@ class World;
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include  "termcolor.h"
 
 #pragma once
 
@@ -50,7 +51,7 @@ class Vehicle {
     virtual void Update(World&, int); //hace el giro y el movimiento en funcion de la casilla
 
     void PrintDirection(void) {
-        std::cout << "\u1F697";
+        std::cout<<termcolor::on_blue << "\u1F697"<<termcolor::reset;
     }
     
    /* void Turn90R(void); //cambia la dirección de la hormiga 90 grados a la derecha
