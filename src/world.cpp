@@ -16,8 +16,8 @@ World::World(){
     row = 10;
     col = 10;
     size = 100;
-    world = Vector<Vector<Cell>> (-10,10);
-    for(int i = 0; i < 10; i++) {
+    world.resize(10);
+    for(int i = 0; i < world.size(); i++) {
         world[i].resize(10);
     }
 }
@@ -25,43 +25,23 @@ World::World(){
 World::World(int row_, int col_) {
 
     row = row_, col = col_;
-
-    if (row % 2 == 0) row_max = row / 2 - 1;
-    else row_max = row / 2;
-    row_min = row / -2;
-
-    if (col % 2 == 0) col_max = col / 2 - 1;
-    else col_max = col / 2;
-    col_min = col / -2;
-
     size = row * col;
     world.resize(row);
-    world.SetLowerLimit(row_min);
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++){
+    for(int i = 0; i < world.size(); i++){
         world[i].resize(col);
-        world[i].SetLowerLimit(col_min);
     }
 }
 
 World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //inicializamos un mundo con obstaculos 
     
-    row = row_, col = col_;
     int x, y;
 
-    if (row % 2 == 0) row_max = row / 2 - 1;
-    else row_max = row / 2;
-    row_min = row / -2;
-
-    if (col % 2 == 0) col_max = col / 2 - 1;
-    else col_max = col / 2;
-    col_min = col / -2;
-
+    row = row_, col = col_;
     size = row * col;
+
     world.resize(row);
-    world.SetLowerLimit(row_min);
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+    for(int i = 0; i < world.size(); i++) {
         world[i].resize(col);
-        world[i].SetLowerLimit(col_min);
     }
 
     int obstacle_quantity = size * obstacle_percentage / 100;
@@ -70,8 +50,8 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
 
         srand(time(NULL)); 
         for(int i = 0; i < obstacle_quantity; i++) {
-            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
-            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+            int random_row = rand()%(world.size() - 0) + 0;
+            int random_col = rand()%(world[random_row].size());
 
             SetWorldState('O', random_row, random_col);
             SetWorldValue(true, random_row, random_col);
@@ -85,24 +65,22 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
             do {
                 std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
                 std::cin >> x;
-                while ((x < 0) || (x > row_max * 2 - 1)) {
+                while ((x < 0) || (x > row)) {
                     std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row << std:: endl;
                 std::cin >> x;
                 }
 
                 std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
                 std::cin >> y;
-                while ((y < 0) || ( y > col_max * 2 - 1)) {
+                while ((y < 0) || ( y > col)) {
                     std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col << std:: endl;
                     std::cin >> y;
                 }
                 
             } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
 
-            x += row_min;
-            y += col_min;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
         }
@@ -139,10 +117,7 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
             number2.clear();
             movement = 0;
 
-            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) throw 1;
-
-            x += row_min;
-            y += col_min;
+            if((x < 0) || (x > row) || (y < 0) || ( y > col)) throw 1;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
             }
@@ -168,24 +143,13 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
 }
 
 World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int heuristic_type){ //inicializamos un mundo con tipos de heuristicas y tipos de introducion de obstaculos
-    
-    row = row_, col = col_;
     int x, y;
-
-    if (row % 2 == 0) row_max = row / 2 - 1;
-    else row_max = row / 2;
-    row_min = row / -2;
-
-    if (col % 2 == 0) col_max = col / 2 - 1;
-    else col_max = col / 2;
-    col_min = col / -2;
-
+    row = row_, col = col_;
     size = row * col;
+
     world.resize(row);
-    world.SetLowerLimit(row_min);
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+    for(int i = 0; i < world.size(); i++) {
         world[i].resize(col);
-        world[i].SetLowerLimit(col_min);
     }
 
     switch(heuristic_type) {
@@ -206,8 +170,8 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
 
         srand(time(NULL)); 
         for(int i = 0; i < obstacle_quantity; i++) {
-            int random_row = rand()%(world.GetUpperLimit() - world.GetLowerLimit()) + world.GetLowerLimit();
-            int random_col = rand()%(world[random_row].GetUpperLimit() - world[random_row].GetLowerLimit()) + world[random_row].GetLowerLimit();
+            int random_row = rand()%(world.size());
+            int random_col = rand()%(world[random_row].size());
 
             SetWorldState('O', random_row, random_col);
             SetWorldValue(true, random_row, random_col);
@@ -221,24 +185,22 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
             do {
                 std::cout << "Introduzca la coordenada X del obstaculo " << i+1 << " : ";
                 std::cin >> x;
-                while ((x < 0) || (x > row_max * 2 - 1)) {
+                while ((x < 0) || (x > row)) {
                     std::cout << "Esa coordenada X no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row_max * 2 - 1 << std:: endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << row << std:: endl;
                 std::cin >> x;
                 }
 
                 std::cout << "Introduzca la coordenada Y del obstaculo " << i+1 << " : ";
                 std::cin >> y;
-                while ((y < 0) || ( y > col_max * 2 - 1)) {
+                while ((y < 0) || ( y > col)) {
                     std::cout << "Esa coordenada Y no está dentro del mundo previamente definido. Ojito Cuidado" << std::endl;
-                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col_max * 2 - 1 << std:: endl;
+                    std::cout << "Introduzca una coordenada entre " << 0 << " y " << col << std:: endl;
                     std::cin >> y;
                 }
                 
             } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
 
-            x += row_min;
-            y += col_min;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
         }
@@ -275,10 +237,8 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
             number2.clear();
             movement = 0;
 
-            if((x < 0) || (x > row_max * 2 - 1) || (y < 0) || ( y > col_max * 2 - 1)) throw 1;
+            if((x < 0) || (x > row) || (y < 0) || ( y > col)) throw 1;
 
-            x += row_min;
-            y += col_min;
             SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
             }
@@ -356,15 +316,13 @@ void World::ToggleWorldValue(int i, int j){
 }
 
 
-void World::SetWorld(Vector<Vector<Cell>>& new_world){
+void World::SetWorld(std::vector<std::vector<Cell>>& new_world){
 
-    world.resize(new_world.GetSize());
-    world.SetLowerLimit(new_world.GetLowerLimit());
+    world.resize(new_world.size());
 
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++){
-        world[i].resize(new_world[i].GetSize());
-        world[i].SetLowerLimit(new_world[i].GetLowerLimit());
-        for(int j = world[i].GetLowerLimit(); j < world[i].GetUpperLimit(); j++){
+    for(int i = 0; i < world.size(); i++){
+        world[i].resize(new_world[i].size());
+        for(int j = 0; j < world[i].size(); j++){
             world[i][j] = new_world[i][j];
         }
     }
@@ -372,9 +330,9 @@ void World::SetWorld(Vector<Vector<Cell>>& new_world){
 
 void World::PrintWorld(void) {
     PrintHorizontalWall();
-    for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+    for(int i = 0; i < world.size(); i++) {
         std::cout << "|";
-        for(int j = world[i].GetLowerLimit(); j < world[i].GetUpperLimit(); j++) {
+        for(int j = 0; j < world[i].size(); j++) {
             std::cout <<  GetWorldState(i,j) ;
         }
         std::cout << "|" << std::endl;
@@ -383,7 +341,7 @@ void World::PrintWorld(void) {
 }
 
 void World::PrintHorizontalWall(void) {   
-    for(int i = world[0].GetLowerLimit(); i < world[0].GetUpperLimit() + 2; i++){
+    for(int i = 0; i < world[0].size() + 2; i++){
         std::cout << "-";
     }
     std::cout << std::endl;
@@ -404,9 +362,9 @@ void World::PrintHorizontalWall(void) {
 
 void World::PrintGrid(Vehicle* vehicle){
     PrintHorizontalWall();
-        for(int i = world.GetLowerLimit(); i < world.GetUpperLimit(); i++) {
+        for(int i = 0; i < world.size(); i++) { 
             std::cout << "|";
-            for(int j = world[i].GetLowerLimit(); j < world[i].GetUpperLimit(); j++) {
+            for(int j = 0; j < world[i].size(); j++) {
                 if((i == vehicle->GetRow()) && (j == vehicle->GetColumn()))
                     vehicle->PrintDirection();
                 else if ((i == vehicle->GetDestinationRow()) && (j == vehicle->GetDestinationColumn())){
@@ -421,7 +379,7 @@ void World::PrintGrid(Vehicle* vehicle){
 
 bool World::VehicleOut(Vehicle* vehicle) {
     bool condition = false;
-    if((vehicle->GetRow() >= world.GetUpperLimit()) || (vehicle->GetColumn() >= world.GetUpperLimit()) || (vehicle->GetRow() < world.GetLowerLimit()) || (vehicle->GetColumn() < world.GetLowerLimit()))
+    if((vehicle->GetRow() >= world.size()) || (vehicle->GetColumn() >= world.size()) || (vehicle->GetRow() < 0) || (vehicle->GetColumn() < 0))
         condition = true;
     return condition;
 }
@@ -474,13 +432,13 @@ std::vector<std::vector<int>> World::Adjacency_Graph_4() {
         int y = (i - x) / row;
         x -= row / 2;
         y -= col / 2;
-        if (i + 1 < size && x + 1 <= row_max) if (!GetWorldValue(x + 1, y)) 
+        if (i + 1 < size && x + 1 <= row) if (!GetWorldValue(x + 1, y)) 
             graph[i][i + 1] = 1;
-        if (i - 1 >= 0 && x - 1 >= row_min) if (!GetWorldValue(x - 1, y)) 
+        if (i - 1 >= 0 && x - 1 >= 0) if (!GetWorldValue(x - 1, y)) 
             graph[i][i - 1] = 1;
-        if (i - row >= 0 && y - 1 >= col_min) if (!GetWorldValue(x, y - 1)) 
+        if (i - row >= 0 && y - 1 >= 0) if (!GetWorldValue(x, y - 1)) 
             graph[i][i - row] = 1;
-        if (i + row < size && y + 1 <= col_max) if (!GetWorldValue(x, y + 1)) 
+        if (i + row < size && y + 1 <= col) if (!GetWorldValue(x, y + 1)) 
             graph[i][i + row] = 1;
     }
 
@@ -502,21 +460,21 @@ std::vector<std::vector<int>> World::Adjacency_Graph_8() {
         int y = (i - x) / row;
         x -= row / 2;
         y -= col / 2;
-        if (i + 1 < size && x + 1 <= row_max) if (!GetWorldValue(x + 1, y)) 
+        if (i + 1 < size && x + 1 <= row) if (!GetWorldValue(x + 1, y)) 
             graph[i][i + 1] = 1;
-        if (i - 1 >= 0 && x - 1 >= row_min) if (!GetWorldValue(x - 1, y)) 
+        if (i - 1 >= 0 && x - 1 >= 0) if (!GetWorldValue(x - 1, y)) 
             graph[i][i - 1] = 1;
-        if (i - row >= 0 && y - 1 >= col_min) if (!GetWorldValue(x, y - 1)) 
+        if (i - row >= 0 && y - 1 >= 0) if (!GetWorldValue(x, y - 1)) 
             graph[i][i - row] = 1;
-        if (i + row < size && y + 1 <= col_max) if (!GetWorldValue(x, y + 1)) 
+        if (i + row < size && y + 1 <= col) if (!GetWorldValue(x, y + 1)) 
             graph[i][i + row] = 1;
-        if (i + 1 + row < size && x + 1 <= row_max && y + 1 <= col_max) if (!GetWorldValue(x + 1, y + 1)) 
+        if (i + 1 + row < size && x + 1 <= row && y + 1 <= col) if (!GetWorldValue(x + 1, y + 1)) 
             graph[i][i + 1 + row] = 1;
-        if (i - 1 + row < size && x - 1 >= row_min && y + 1 <= col_max) if (!GetWorldValue(x - 1, y + 1)) 
+        if (i - 1 + row < size && x - 1 >= 0 && y + 1 <= col) if (!GetWorldValue(x - 1, y + 1)) 
             graph[i][i - 1 + row] = 1;
-        if (i + 1 - row >= 0 && x + 1 <= row_max && y - 1 <= col_min) if (!GetWorldValue(x + 1, y - 1)) 
+        if (i + 1 - row >= 0 && x + 1 <= row && y - 1 <= 0) if (!GetWorldValue(x + 1, y - 1)) 
             graph[i][i + 1 - row] = 1;
-        if (i - 1 - row >= 0 && x - 1 <= row_min && y - 1 <= col_min) if (!GetWorldValue(x - 1, y - 1)) 
+        if (i - 1 - row >= 0 && x - 1 <= 0 && y - 1 <= 0) if (!GetWorldValue(x - 1, y - 1)) 
             graph[i][i - 1 - row] = 1;
     }
 

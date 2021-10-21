@@ -34,7 +34,7 @@ class Vehicle {
     public:
 
     Vehicle();
-    Vehicle(int, int, int, int, int);
+    Vehicle(int, int, int, int);
     ~Vehicle();
 
     int GetRow(void); //devulve la fila en la que se encuentra la hormiga
@@ -49,7 +49,9 @@ class Vehicle {
 
     virtual void Update(World&, int); //hace el giro y el movimiento en funcion de la casilla
 
-    virtual void PrintDirection(void) = 0;
+    void PrintDirection(void) {
+        std::cout << "\u1F697";
+    }
     
    /* void Turn90R(void); //cambia la dirección de la hormiga 90 grados a la derecha
     void Turn90L(void); //cambia la dirección de la hormiga 90 grados a la izquierda

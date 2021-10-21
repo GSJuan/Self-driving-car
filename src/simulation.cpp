@@ -12,17 +12,10 @@
 
 //Constructores y destructor
 Simulation::Simulation() {
-    max_iter = 10;
     curr_iter = 0;
 }
 
-Simulation::Simulation(int iter){
-    max_iter = iter;
-    curr_iter = 0;
-}
-
-Simulation::Simulation(World* world, Vehicle* taxi, int iterations){
-    max_iter = iterations;
+Simulation::Simulation(World* world, Vehicle* taxi){
     curr_iter = 0;
     vehicle = taxi;
     grid = world;
@@ -31,18 +24,10 @@ Simulation::Simulation(World* world, Vehicle* taxi, int iterations){
 Simulation::~Simulation() {
 }
 
-int Simulation::GetMaxIter(void) {
-    return max_iter;
-}
-
 int Simulation::GetCurrIter(void) {
     return curr_iter;
 }
 
-void Simulation::SetMaxIter(int iteration) {
-    max_iter = iteration;
-}
-   
 void Simulation::SetCurrIter(int iteration) {
     curr_iter = iteration;
 }
@@ -57,8 +42,7 @@ void Simulation::Loop(void) {
     std::cout << "Current iteration: " << GetCurrIter() << std::endl;
     PrintData(); 
     try {
-        int x = vehicle->GetDestinationColumn(),    y = vehicle->GetDestinationRow();
-        x += grid->GetRow() / 2,                    y += grid->GetColumn() / 2;
+        int x = vehicle->GetDestinationColumn(),    y = vehicle->GetDestinationRow(); // revisar!!!!
         int end = x + grid->GetRow() * y;
 
         std::vector<int> path = GetPath(end);
@@ -93,7 +77,6 @@ void Simulation::PrintData(void) {
 
 std::vector<int> Simulation::GetPath(int end) {
     int x = vehicle->GetRow(),  y = vehicle->GetColumn();
-    x += grid->GetRow() / 2,    y += grid->GetColumn() / 2;
     int source = x + grid->GetRow() * y;
 
     auto ruta = grid->Dijkstra(source);

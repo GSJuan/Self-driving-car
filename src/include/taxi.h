@@ -55,34 +55,4 @@ virtual void Move(void) {
     else std::cout << "aquí ha habido un error, direction = " << direction << std::endl;
 
 }
-
-virtual void PrintDirection(void){
-    int direction = GetDirection();
-    switch(direction){
-        case 1: std::cout << "\u2191";
-        break;
-
-        case 2: std::cout << "\u2197";
-        break;
-
-        case 3: std::cout << "\u2192";
-        break;
-
-        case 4: std::cout << "\u2198";
-        break;
-
-        case 5: std::cout << "\u2193";
-        break;
-
-        case 6: std::cout << "\u2199";
-        break;
-
-        case 7: std::cout << "\u2190";
-        break;
-
-        case 8: std::cout << "\u2196";
-        break;
-    }
-}
-
 };

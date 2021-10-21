@@ -10,12 +10,13 @@
 
 #include "taxi.h"
 #include "uber.h"
-#include "vector.h"
 #include  "f_heuristicas.h"
 
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <time.h>
 
 #pragma once
 
@@ -24,15 +25,9 @@ class World {
 protected:
 
 int row;
-int row_min;
-int row_max;
-
 int col;
-int col_min;
-int col_max;
-
 int size;
-Vector<Vector<Cell>> world;
+std::vector<std::vector<Cell>> world;
 
 f_heuristica* heuristica;
 
@@ -65,7 +60,7 @@ inline Cell GetCell(int i, int j){
     }   
 }
 
-inline Vector<Vector<Cell>>& GetWorld(void){
+inline std::vector<std::vector<Cell>>& GetWorld(void){
     return world;
 }//pasa el mundo por referencia
 
@@ -79,9 +74,7 @@ void SetSize(int);
 void SetWorldState(char, int, int); //establecer el color de una celda
 void SetWorldValue(bool, int, int); //establecer el valor booleano de una celda
 void ToggleWorldValue(int, int);
-void SetWorld(Vector<Vector<Cell>>&);
-
-virtual void ReSize(Vehicle*) = 0;
+void SetWorld(std::vector<std::vector<Cell>>&);
 
 void PrintWorld(void); //imprime la malla sola
 void PrintHorizontalWall(void); //imprime una pared horizontal

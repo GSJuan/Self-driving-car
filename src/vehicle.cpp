@@ -20,10 +20,9 @@ Vehicle::Vehicle(){
     destination_col = 7;
 }
 
-Vehicle::Vehicle(int i, int j, int direction_, int row_destination, int col_destination){
+Vehicle::Vehicle(int i, int j, int row_destination, int col_destination){
     row_pos = i;
     column_pos = j;
-    direction = direction_;
     destination_row = row_destination;
     destination_col = col_destination;
 }

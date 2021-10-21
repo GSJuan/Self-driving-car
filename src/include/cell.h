@@ -48,6 +48,20 @@ class Cell {
         return y;
     }
 
+    bool GetValue() {
+        return value;
+    }
+    char GetState() {
+        return state;
+    }
+
+    int GetX() {
+        return x;
+    }
+    int GetY() {
+        return y;
+    }
+
     void SetValue(bool new_value) {
         value = new_value;
     }
