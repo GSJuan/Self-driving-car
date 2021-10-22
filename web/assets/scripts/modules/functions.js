@@ -9,41 +9,45 @@ export function checkNaN(num) {
 // Checkea si estas clickando en las celdas del tablero o arrastrando el cursor y lo cambia de color
 // Para cada celda lo cambia de color en caso de ser click_izq o el mouse salga de la celda pulsando el click izq
 export function checkclickworld(world, vehicle) {
-  $('.col').on("mouseout", function (e) {
-    if (e.buttons == 1) {
-      let i = $(this).parent().attr('id').replace('row', '');
-      let j = $(this).attr('id').replace('col', '');
-      let current = $('#row' + i + ' > #col' + j);
-
-      if ((vehicle.x != j || vehicle.y != i) && 
-        (vehicle.x_final != j || vehicle.y_final != i)) {
-        if (world.map[i][j] == 0) {
-          current.css('background-color', 'black');
-          world.map[i][j] = 1;
-        } else {
-          current.css('background-color', 'white');
-          world.map[i][j] = 0;
+  for (let j = 0; j < world.col; j++) {
+    setTimeout(() => {
+      $('.col' + j).on("mouseout click", function (e) {
+        if (e.buttons == 1) {
+          let i = $(this).parent().attr('class').replace('row row', '');
+          let j = $(this).attr('class').replace('col col', '');
+          let current = $('.row' + i + ' > .col' + j);
+          
+          if ((vehicle.x != j || vehicle.y != i) && 
+            (vehicle.x_final != j || vehicle.y_final != i)) {
+            if (world.map[i][j] == 0) {
+              current.css('background-color', 'black');
+              world.map[i][j] = 1;
+            } else {
+              current.css('background-color', 'white');
+              world.map[i][j] = 0;
+            }
+          }
         }
-      }
-    }
-  });
+      });
 
-  $('.col').on("click", function () {
-    let i = $(this).parent().attr('id').replace('row', '');
-    let j = $(this).attr('id').replace('col', '');
-    let current = $('#row' + i + ' > #col' + j);
+      $('.col' + j).on("click", function () {
+        let i = $(this).parent().attr('class').replace('row row', '');
+        let j = $(this).attr('class').replace('col col', '');
+        let current = $('.row' + i + ' > .col' + j);
 
-    if ((vehicle.x != j || vehicle.y != i) && 
-        (vehicle.x_final != j || vehicle.y_final != i)) {
-        if (world.map[i][j] == 0) {
-          current.css('background-color', 'black');
-          world.map[i][j] = 1;
-        } else {
-          current.css('background-color', 'white');
-          world.map[i][j] = 0;
-        }
-      }
-  });
+        if ((vehicle.x != j || vehicle.y != i) && 
+            (vehicle.x_final != j || vehicle.y_final != i)) {
+            if (world.map[i][j] == 0) {
+              current.css('background-color', 'black');
+              world.map[i][j] = 1;
+            } else {
+              current.css('background-color', 'white');
+              world.map[i][j] = 0;
+            }
+          }
+      });
+    }, 10);
+  }
 }
 
 // Checkea si estas clickando en las celdas del tablero o arrastrando el cursor y lo cambia de color
@@ -51,9 +55,9 @@ export function checkclickworld(world, vehicle) {
 export function checkmovevehicle(vehicle, world) {
   $('.car').on("mouseout", function (e) {
     if (e.buttons == 1) {
-      let i = $(this).parent().parent().attr('id').replace('row', '');
-      let j = $(this).parent().attr('id').replace('col', '');
-      let current = $('#row' + i + ' > #col' + j);
+      let i = $(this).parent().parent().attr('class').replace('row row', '');
+      let j = $(this).parent().attr('class').replace('col col', '');
+      let current = $('.row' + i + ' > .col' + j);
       
       if ((vehicle.x != j || vehicle.y != i) && 
         (vehicle.x_final != j || vehicle.y_final != i)) {
@@ -74,9 +78,9 @@ export function checkmovevehicle(vehicle, world) {
 export function checkmovefinal(vehicle, world) {
   $('.car').on("mouseout", function (e) {
     if (e.buttons == 1) {
-      let i = $(this).parent().parent().attr('id').replace('row', '');
-      let j = $(this).parent().attr('id').replace('col', '');
-      let current = $('#row' + i + ' > #col' + j);
+      let i = $(this).parent().parent().attr('class').replace('row row', '');
+      let j = $(this).parent().attr('class').replace('col col', '');
+      let current = $('.row' + i + ' > .col' + j);
       
       if ((vehicle.x != j || vehicle.y != i) && 
         (vehicle.x_final != j || vehicle.y_final != i)) {

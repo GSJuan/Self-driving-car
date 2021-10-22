@@ -69,13 +69,41 @@ $('#grid').on("click", () => {
     $('.col').css('border', '1px solid grey');
     check_grid = false;
   } else {
-    $('.col').css('border', '0 solid grey');
+    $('.col').css('border', '0px solid grey');
     check_grid = true;
   }
 });
 
-let table = $('.table-content');
-table.on("scroll", () => {
-  let currentsize = table.css()
-  $('.table-content').css("transform", "scale(" + _ + "%)");
-});
+let table = $('.table');
+let table_cont = $('.table-container');
+let size = 100;
+$('.table-container').on("wheel", (e) => {
+  if(e.originalEvent.deltaY !== 0) {
+    if(e.originalEvent.deltaY < 0) {
+      size += 10;
+      table.css("transform", "scale(" + size + "%)");
+    } else {
+      size -= 10;
+      table.css("transform", "scale(" + size + "%)");
+    }
+  }
+})
+
+table_cont.on("mousedown", (e) => {
+  if (e.buttons == 2) {
+    var relX = e.pageX;
+    var relY = e.pageY;
+
+    table_cont.on("mousemove", (e) => {
+      var diffX = e.pageX - relX;
+      var diffY = e.pageY - relY;
+
+      table.css('top', diffY + 'px');
+      table.css('left', diffX + 'px');
+    })
+  }
+})
+
+table_cont.on("mouseup", () => {
+  table_cont.off("mousemove");
+})

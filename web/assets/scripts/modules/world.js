@@ -14,10 +14,10 @@ export default class World {
     var html = '';
     while (i < this.row) {
       this.map[i] = new Array(this.col).fill(0);
-      html += "<div class='row' id='row" + i + "'>";
+      html += "<div class='row row" + i + "' style='border: 1px solid grey'>";
       let j = 0;
       while (j < this.col) {
-        html += "<div class='col' id='col" + j + "' style='border: 1px solid grey;'></div>";
+        html += "<div class='col col" + j + "' style='border: 1px solid grey'></div>";
         ++j;
       }
       html += "</div>";
@@ -31,12 +31,12 @@ export default class World {
   // Si había uno vuelve a comprobar
   setRandObs(obs_percent = 0, vehicle = null) {
     let obs_qty = this.size * obs_percent / 100;
-    for (let i = 0; i < this.row; i++) {
-      for (let j = 0; j < this.row; j++) {
-        this.map[i][j] = 0;
-        $('#row' + i + ' > #col' + j).css('background-color', 'white');
-      }
-    }
+    for (let i = 0; i < this.row; i++)
+      for (let j = 0; j < this.row; j++)
+        if (this.map[i][j] == 1) {
+          this.map[i][j] = 0;
+          $('.row' + i + ' > .col' + j).css('background-color', 'white');
+        }
 
     let trys = 0;
     for (let i = 0; i < obs_qty; i++) {
@@ -51,7 +51,7 @@ export default class World {
         }
       else {
         this.map[rand_row][rand_col] = 1;
-        $('#row' + rand_row + ' > #col' + rand_col).css('background-color', 'black');
+        $('.row' + rand_row + ' > .col' + rand_col).css('background-color', 'black');
         trys = 0;
       }
       if (trys == 1000) return;
@@ -62,6 +62,6 @@ export default class World {
   clear() {
     if (this.row === undefined) this.row = 10;
     for (let i = 0; i < this.row; i++) 
-      $('#row' + i).remove();
+      $('.row' + i).remove();
   }
 }
