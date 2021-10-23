@@ -10,13 +10,13 @@
 
 #include "taxi.h"
 #include "uber.h"
-#include  "f_heuristicas.h"
-#include  "termcolor.h"
+#include "f_heuristicas.h"
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <time.h>
+#include "termcolor.h"
 
 #pragma once
 
@@ -64,14 +64,12 @@ public:
         return world;
     }//pasa el mundo por referencia
 
-    char GetWorldState(int, int); //devuelve el "color" de una celda
     bool GetWorldValue(int, int); //devuelve el estado booleano de una celda
 
     void SetRow(int);
     void SetColumn(int);
     void SetSize(int);
 
-    void SetWorldState(char, int, int); //establecer el color de una celda
     void SetWorldValue(bool, int, int); //establecer el valor booleano de una celda
     void ToggleWorldValue(int, int);
     void SetWorld(std::vector<std::vector<Cell>>&);

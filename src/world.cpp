@@ -17,7 +17,7 @@ World::World(){
     col = 10;
     size = 100;
     world.resize(10);
-    for(int i = 0; i < world.size(); i++) {
+    for(unsigned int i = 0; i < world.size(); i++) {
         world[i].resize(10);
     }
 }
@@ -27,7 +27,7 @@ World::World(int row_, int col_) {
     row = row_, col = col_;
     size = row * col;
     world.resize(row);
-    for(int i = 0; i < world.size(); i++){
+    for(unsigned int i = 0; i < world.size(); i++){
         world[i].resize(col);
     }
 }
@@ -40,7 +40,7 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
     size = row * col;
 
     world.resize(row);
-    for(int i = 0; i < world.size(); i++) {
+    for(unsigned int i = 0; i < world.size(); i++) {
         world[i].resize(col);
     }
 
@@ -53,7 +53,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
             int random_row = rand()%(world.size() - 0) + 0;
             int random_col = rand()%(world[random_row].size());
 
-            SetWorldState('O', random_row, random_col);
             SetWorldValue(true, random_row, random_col);
         }
         break;
@@ -81,7 +80,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
                 
             } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
 
-            SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
         }
 
@@ -118,7 +116,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type){ //
             movement = 0;
 
             if((x < 0) || (x > row) || (y < 0) || ( y > col)) throw 1;
-            SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
             }
         }          
@@ -148,7 +145,7 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
     size = row * col;
 
     world.resize(row);
-    for(int i = 0; i < world.size(); i++) {
+    for(unsigned int i = 0; i < world.size(); i++) {
         world[i].resize(col);
     }
 
@@ -173,7 +170,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
             int random_row = rand()%(world.size());
             int random_col = rand()%(world[random_row].size());
 
-            SetWorldState('O', random_row, random_col);
             SetWorldValue(true, random_row, random_col);
         }
         break;
@@ -201,7 +197,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
                 
             } while (GetWorldValue(x, y) == true); //mientras la casilla ya esté ocupada
 
-            SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
         }
 
@@ -239,7 +234,6 @@ World::World(int row_, int col_, int obstacle_percentage, int obstacle_type, int
 
             if((x < 0) || (x > row) || (y < 0) || ( y > col)) throw 1;
 
-            SetWorldState('O', x, y);
             SetWorldValue(true, x, y);
             }
         }          
@@ -271,10 +265,6 @@ World::~World(){
 
 //Getters y Setters
 
-char World::GetWorldState(int i, int j) {
-    return world[i][j].GetState();
-}
-
 bool World::GetWorldValue(int i, int j) {
     try {
        return world[i][j].GetValue();
@@ -297,10 +287,6 @@ void World::SetSize(int size_) {
     size = size_;
 }
 
-void World::SetWorldState(char state_, int i, int j) {
-    world[i][j].SetState(state_);
-}
-
 void World::SetWorldValue(bool value_, int i, int j) {
     world[i][j].SetValue(value_);
 }
@@ -320,9 +306,9 @@ void World::SetWorld(std::vector<std::vector<Cell>>& new_world){
 
     world.resize(new_world.size());
 
-    for(int i = 0; i < world.size(); i++){
+    for(unsigned int i = 0; i < world.size(); i++){
         world[i].resize(new_world[i].size());
-        for(int j = 0; j < world[i].size(); j++){
+        for(unsigned int j = 0; j < world[i].size(); j++){
             world[i][j] = new_world[i][j];
         }
     }
@@ -330,10 +316,11 @@ void World::SetWorld(std::vector<std::vector<Cell>>& new_world){
 
 void World::PrintWorld(void) {
     PrintHorizontalWall();
-    for(int i = 0; i < world.size(); i++) {
+    for(unsigned int i = 0; i < world.size(); i++) {
         std::cout << "|";
-        for(int j = 0; j < world[i].size(); j++) {
-            std::cout <<  GetWorldState(i,j) ;
+        for(unsigned int j = 0; j < world[i].size(); j++) {
+            if (GetWorldValue(i,j))
+                std::cout << " ";
         }
         std::cout << "|" << std::endl;
     }
@@ -341,8 +328,8 @@ void World::PrintWorld(void) {
 }
 
 void World::PrintHorizontalWall(void) {   
-    for(int i = 0; i < world[0].size() + 2; i++){
-        std::cout<<termcolor::on_bright_grey << "-"<<termcolor::reset;
+    for(unsigned int i = 0; i < world[0].size() + 2; i++) {
+        std::cout << termcolor::on_color<0, 0, 0> << "-" << termcolor::reset;
     }
     std::cout << std::endl;
 }
@@ -361,25 +348,31 @@ void World::PrintHorizontalWall(void) {
 */
 
 void World::PrintGrid(Vehicle* vehicle){
-    PrintHorizontalWall();
-        for(int i = 0; i < world.size(); i++) { 
-            std::cout << termcolor::on_bright_grey<<"|"<<termcolor::reset;
-            for(int j = 0; j < world[i].size(); j++) {
-                if((i == vehicle->GetRow()) && (j == vehicle->GetColumn()))
+    //PrintHorizontalWall();
+        for(unsigned int i = 0; i < world.size(); i++) { 
+            //std::cout << termcolor::on_color<0, 0, 0> << "|" << termcolor::reset;
+            for(unsigned int j = 0; j < world[i].size(); j++) {
+                if((i == unsigned(vehicle->GetRow())) && (j == unsigned(vehicle->GetColumn())))
                     vehicle->PrintDirection();
-                else if ((i == vehicle->GetDestinationRow()) && (j == vehicle->GetDestinationColumn())){ 
-                    std::cout <<termcolor::on_blue << "\u2691" << termcolor::reset;
+                else if ((i == unsigned(vehicle->GetDestinationRow())) && (j == unsigned(vehicle->GetDestinationColumn()))) { 
+                    std::cout << termcolor::on_red << "X" << termcolor::reset;
                 }
-                else std::cout<<termcolor::on_white << GetWorldState(i,j)<<termcolor::reset;
+                else { 
+                    if (GetWorldValue(i, j)) 
+                        std::cout << termcolor::on_color<0, 0, 0> << " " << termcolor::reset;
+                    else
+                        std::cout << termcolor::on_white << " " << termcolor::reset;
+                }
             }
-            std::cout<<termcolor::on_bright_grey<< "|" <<termcolor::reset<< std::endl;
+            std::cout << "\n";
+            //std::cout << termcolor::on_color<0, 0, 0> << "|" << termcolor::reset << std::endl;
         }
-    PrintHorizontalWall();
+    //PrintHorizontalWall();
 }
 
 bool World::VehicleOut(Vehicle* vehicle) {
     bool condition = false;
-    if((vehicle->GetRow() >= world.size()) || (vehicle->GetColumn() >= world.size()) || (vehicle->GetRow() < 0) || (vehicle->GetColumn() < 0))
+    if((unsigned(vehicle->GetRow()) >= world.size()) || (unsigned(vehicle->GetColumn()) >= world.size()) || (vehicle->GetRow() < 0) || (vehicle->GetColumn() < 0))
         condition = true;
     return condition;
 }

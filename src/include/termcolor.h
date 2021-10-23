@@ -136,7 +136,7 @@ namespace termcolor
         #if defined(TERMCOLOR_USE_ANSI_ESCAPE_SEQUENCES)
             stream << "\033[4m";
         #elif defined(TERMCOLOR_USE_WINDOWS_API)
-            _internal::win_change_attributes(stream, -1, COMMON_LVB_UNDERSCORE);
+            _internal::win_change_attributes(stream, -1, -1);
         #endif
         }
         return stream;
@@ -908,4 +908,4 @@ namespace termcolor
 #   undef TERMCOLOR_USE_WINDOWS_API
 #endif
 
-#endif // TERMCOLOR_HPP_
+#endif // TERMCOLOR_H_

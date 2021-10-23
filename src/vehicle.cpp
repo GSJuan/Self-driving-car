@@ -12,7 +12,7 @@
 #include "include/world.h"
 
 //Constructores
-Vehicle::Vehicle(){
+Vehicle::Vehicle() {
     row_pos = 0;
     column_pos = 0;
     direction = 1;
@@ -68,7 +68,7 @@ void Vehicle::Update(World& grid, int nodo) {
     try{
         Turn(nodo, grid.GetRow(), grid.GetColumn());
         grid.ToggleWorldValue(GetRow(), GetColumn());
-        grid.SetWorldState('X', GetRow(), GetColumn());
+        grid.SetWorldValue(2, GetRow(), GetColumn());
         Move(); 
     }
     catch (std::exception& e){
